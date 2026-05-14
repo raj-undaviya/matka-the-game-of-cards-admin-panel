@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import { useState } from "react";
 
 import { AdminSidebar } from "@/components/Navbar/AdminSidebar";
 import { AdminTopbar } from "@/components/Navbar/AdminTopBar";
+import AdminDashboardPage from "@/pages/AdminDashboardPage";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -24,12 +24,12 @@ function App() {
           <main className="p-4 md:p-6">
             <Routes>
 
-              {/* <Route
-                path="/"
-                element={
-                  <Navigate to="/admin/overview" />
-                }
-              /> */}
+              <Route path="/" element={<Navigate to="/admin/overview" />} />
+
+              <Route
+                path="/admin/overview"
+                element={<AdminDashboardPage />}
+              />
 
             </Routes>
           </main>

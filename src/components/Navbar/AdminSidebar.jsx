@@ -40,7 +40,7 @@ export function AdminSidebar({ open, setOpen }) {
                 />
             )}
 
-            <aside className={`fixed lg:static z-50 top-0 left-0 h-screen w-64 bg-white border border-gray-200 flex flex-col transition-transform duration-300
+            <aside className={`fixed lg:static z-50 top-0 left-0 min-h-screen w-64 bg-white border border-gray-200 flex flex-col transition-transform duration-300
                 ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
             >
                 {/* Logo */}

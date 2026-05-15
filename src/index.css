@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+:root {
+
+    /* =========================
+       BRAND COLORS
+    ========================== */
+
+    --primary-color: #10B981;
+    --primary-hover-color: #059669;
+    --primary-light-color: #D1FAE5;
+
+    --secondary-color: #0F172A;
+
+    --tertiary-color: #3B82F6;
+
+    /* =========================
+       TEXT COLORS
+    ========================== */
+
+    --text-color: #0F172A;
+    --text-light-color: #64748B;
+
+    /* =========================
+       BACKGROUND COLORS
+    ========================== */
+
+    --background-color: #FFFFFF;
+    --background-light-color: #F8FAFC;
+
+    /* =========================
+       BORDER COLORS
+    ========================== */
+
+    --border-color: #E2E8F0;
+
+    /* =========================
+       STATUS COLORS
+    ========================== */
+
+    --danger-color: #EF4444;
+
+    /* =========================
+       FONT
+    ========================== */
+
+    --font-family: "Inter", sans-serif;
+
+    /* =========================
+       TRANSITION
+    ========================== */
+
+    --transition-default: all 0.3s ease;
+}
+
+/* =========================
+   GLOBAL STYLES
+========================== */
+
+body {
+
+    font-family: var(--font-family);
+
+    background-color: var(--background-color);
+
+    color: var(--text-color);
+
+}
+
+/* =========================
+   UTILITY CLASSES
+========================== */
+
+/* Text */
+.primary-text {
+    color: var(--primary-color);
+}
+
+.secondary-text {
+    color: var(--secondary-color);
+}
+
+.tertiary-text {
+    color: var(--tertiary-color);
+}
+
+/* Background */
+.primary-bg {
+    background-color: var(--primary-color);
+}
+
+.primary-bg-light {
+    background-color: var(--primary-light-color);
+}
+
+/* Border */
+.custom-border {
+    border-color: var(--border-color);
+}
+
+/* Hover */
+.primary-hover:hover {
+    color: var(--primary-hover-color);
+}
+
+.primary-bg-hover:hover {
+    background-color: var(--primary-hover-color);
+}
+
+/* Transition */
+.transition-default {
+    transition: var(--transition-default);
+}
+
+/* =========================
+   HIDE SCROLLBAR
+========================== */
+
+.hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}

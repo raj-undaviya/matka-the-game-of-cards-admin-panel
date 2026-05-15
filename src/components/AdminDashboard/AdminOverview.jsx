@@ -1,11 +1,4 @@
-import {
-    Download,
-    RefreshCw,
-    Users2,
-    Network,
-    Server,
-    AlertTriangle,
-} from "lucide-react";
+import { Download, RefreshCw, Users2, Network, Server, AlertTriangle } from "lucide-react";
 
 const revenueBars = [22, 35, 30, 42, 55, 50, 38, 65, 72, 8, 78, 12, 95];
 

@@ -1,40 +1,30 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
-
-import { AdminSidebar } from "@/components/Navbar/AdminSidebar";
-import { AdminTopbar } from "@/components/Navbar/AdminTopBar";
+import AdminLayout from "@/components/layout/AdminLayout";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
+import AdminUsersPage from "@/pages/AdminUsersPage";
+import AdminGamesPage from "@/pages/AdminGamesPage";
+import AdminJackpotPage from "@/pages/AdminJackpotPage";
+import AdminRiskPage from "@/pages/AdminRiskPage";
 
 function App() {
   const [open, setOpen] = useState(false);
 
   return (
     <BrowserRouter>
-      <div className="flex bg-[#f5f7fb] min-h-screen">
+      <Routes>
+        <Route path="/" element={<Navigate to="/admin/overview" replace />} />
 
-        <AdminSidebar
-          open={open}
-          setOpen={setOpen}
-        />
-
-        <div className="flex-1 flex flex-col md:ml-0">
-
-          <AdminTopbar setOpen={setOpen} />
-
-          <main className="p-4 md:p-6">
-            <Routes>
-
-              <Route path="/" element={<Navigate to="/admin/overview" />} />
-
-              <Route
-                path="/admin/overview"
-                element={<AdminDashboardPage />}
-              />
-
-            </Routes>
-          </main>
-        </div>
-      </div>
+        <Route
+          element={<AdminLayout open={open} setOpen={setOpen} />}
+        >
+          <Route path="/admin/overview" element={<AdminDashboardPage />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
+          <Route path="/admin/games" element={<AdminGamesPage />} />
+          <Route path="/admin/jackpot" element={<AdminJackpotPage />} />
+          <Route path="/admin/risk" element={<AdminRiskPage />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

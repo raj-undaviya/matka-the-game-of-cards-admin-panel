@@ -2,7 +2,7 @@ import { revenueBars,revenueHours } from "@/data/dashboarddata";
 
 export default function RevenueChart() {
     return (
-        <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+        <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm h-full">
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-semibold">Revenue Telemetry</h2>

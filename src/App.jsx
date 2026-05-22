@@ -6,6 +6,7 @@ import AdminUsersPage from "@/pages/AdminUsersPage";
 import AdminGamesPage from "@/pages/AdminGamesPage";
 import AdminJackpotPage from "@/pages/AdminJackpotPage";
 import AdminRiskPage from "@/pages/AdminRiskPage";
+import AdminPoliciesPage from "@/pages/AdminPoliciesPage";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -23,6 +24,7 @@ function App() {
           <Route path="/admin/games" element={<AdminGamesPage />} />
           <Route path="/admin/jackpot" element={<AdminJackpotPage />} />
           <Route path="/admin/risk" element={<AdminRiskPage />} />
+          <Route path="/admin/policies" element={<AdminPoliciesPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

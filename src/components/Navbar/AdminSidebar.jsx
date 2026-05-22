@@ -1,4 +1,4 @@
-import { LayoutGrid, Users, Gamepad2, Dice5, ShieldAlert, X, Server } from "lucide-react";
+import { LayoutGrid, Users, Gamepad2, Dice5, ShieldAlert, FileText, X, Server } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const nav = [
@@ -7,6 +7,7 @@ const nav = [
   { path: "/admin/games", label: "Games", icon: Gamepad2 },
   { path: "/admin/jackpot", label: "Jackpot", icon: Dice5 },
   { path: "/admin/risk", label: "Risk Management", icon: ShieldAlert },
+  { path: "/admin/policies", label: "Policies & Compliance", icon: FileText },
 ];
 
 export function AdminSidebar({ open, setOpen }) {

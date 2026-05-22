@@ -1,57 +1,54 @@
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
 export default function DataTable({ columns, data }) {
-    return (
-        <div className="overflow-x-auto">
-
-            <table className="min-w-full">
-
-                <thead className="bg-gray-50">
-
-                    <tr>
-
-                        {columns.map((column) => (
-                            <th
-                                key={column.title}
-                                className="px-4 py-4 text-left text-sm font-semibold text-gray-500"
-                            >
-                                {column.title}
-                            </th>
-                        ))}
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    {data.map((row, rowIndex) => (
-                        <tr
-                            key={rowIndex}
-                            className="border-t border-gray-100"
-                        >
-
-                            {columns.map((column) => (
-                                <td
-                                    key={column.title}
-                                    className="px-4 py-4"
-                                >
-
-                                    {column.render
-                                        ? column.render(
-                                            row[column.dataIndex],
-                                            row
-                                        )
-                                        : row[column.dataIndex]}
-
-                                </td>
-                            ))}
-
-                        </tr>
-                    ))}
-
-                </tbody>
-
-            </table>
-
-        </div>
-    );
+  return (
+    <TableContainer className="overflow-x-auto hide-scrollbar">
+      <Table>
+        <TableHead>
+          <TableRow>
+            {columns.map((column) => (
+              <TableCell
+                key={column.title}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "0.75rem",
+                  color: "var(--text-light-color)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  borderBottom: "1px solid var(--border-color)",
+                  bgcolor: "var(--background-light-color)",
+                }}
+              >
+                {column.title}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row, rowIndex) => (
+            <TableRow
+              key={row.id ?? rowIndex}
+              sx={{ "&:last-child td": { border: 0 } }}
+            >
+              {columns.map((column) => (
+                <TableCell
+                  key={column.title}
+                  sx={{ borderBottom: "1px solid var(--border-color)", py: 2 }}
+                >
+                  {column.render
+                    ? column.render(row[column.dataIndex], row)
+                    : row[column.dataIndex]}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 }

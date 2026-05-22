@@ -8,7 +8,7 @@ export default function ClusterSection() {
             {clusters.map((cluster) => (
                 <ClusterCard
                     key={cluster.name}
-                    cluster={cluster}
+                    {...cluster}
                 />
             ))}
 

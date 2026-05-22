@@ -57,14 +57,18 @@
    GLOBAL STYLES
 ========================== */
 
+html,
 body {
-
     font-family: var(--font-family);
-
     background-color: var(--background-color);
-
     color: var(--text-color);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
 }
 
 /* =========================
@@ -113,8 +117,19 @@ body {
 }
 
 /* =========================
-   HIDE SCROLLBAR
+   HIDE SCROLLBAR (global + utility)
 ========================== */
+
+*,
+*::before,
+*::after {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
 
 .hide-scrollbar {
     scrollbar-width: none;
@@ -123,4 +138,43 @@ body {
 
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
+}
+
+/* =========================
+   GLASS LIQUID SEARCH
+========================== */
+
+.glass-search {
+    position: relative;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    transition: var(--transition-default);
+}
+
+.glass-search--active {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    box-shadow:
+        0 8px 32px rgba(16, 185, 129, 0.12),
+        0 2px 8px rgba(15, 23, 42, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -1px 0 rgba(16, 185, 129, 0.06);
+}
+
+.glass-search--active::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.5) 0%,
+        rgba(209, 250, 229, 0.15) 50%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
 }

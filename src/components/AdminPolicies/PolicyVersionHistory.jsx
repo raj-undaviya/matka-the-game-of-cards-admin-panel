@@ -1,4 +1,4 @@
-import { Clock, Eye } from "lucide-react";
+import { Clock, Eye, Pencil, Trash2 } from "lucide-react";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import SectionCard from "@/components/shared/SectionCard";
@@ -20,18 +20,45 @@ const columns = [
     ),
   },
   { title: "DATE", dataIndex: "date" },
+  
   { title: "CHANGE SUMMARY", dataIndex: "summary" },
+
   {
     title: "ACTIONS",
     dataIndex: "id",
-    render: (value) => (
-      <Tooltip title="View version">
-        <IconButton size="small" aria-label={`View ${value}`}>
-          <Eye size={18} style={{ color: "var(--text-light-color)" }} />
-        </IconButton>
-      </Tooltip>
+    render: (value, row) => (
+      <div className="flex items-center gap-1">
+        {/* View */}
+        <Tooltip title="View version">
+          <IconButton size="small" aria-label={`View ${value}`}>
+            <Eye size={18} style={{ color: "var(--text-light-color)" }} />
+          </IconButton>
+        </Tooltip>
+
+        {/* Edit */}
+        <Tooltip title="Edit version">
+          <IconButton
+            size="small"
+            aria-label={`Edit ${value}`}
+            onClick={() => console.log("Edit", row)}
+          >
+            <Pencil size={18} style={{ color: "var(--primary-color)" }} />
+          </IconButton>
+        </Tooltip>
+
+        {/* Delete */}
+        <Tooltip title="Delete version">
+          <IconButton
+            size="small"
+            aria-label={`Delete ${value}`}
+            onClick={() => console.log("Delete", row)}
+          >
+            <Trash2 size={18} style={{ color: "#ef4444" }} />
+          </IconButton>
+        </Tooltip>
+      </div>
     ),
-  },
+  }
 ];
 
 export default function PolicyVersionHistory() {

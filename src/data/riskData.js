@@ -1,50 +1,78 @@
-export const riskAlerts = [
+export const riskStats = {
+  averageRisk: 24.8,
+  riskDelta: "+3.2%",
+  highRiskAlerts: 12,
+  blockedIps: 1402,
+};
+
+export const flaggedActivity = [
   {
-    id: "R-001",
-    user: "Shadow_X",
-    type: "Suspicious Withdrawal",
-    region: "Germany",
-    severity: "high",
-    time: "12 min ago",
+    index: "#821",
+    user: "j.valdes_22",
+    userId: "ID: 992-AX2",
+    reason: "MULTI-ACCOUNTING",
+    reasonType: "warning", // Orange
+    riskScore: 92,
+    location: "Sofia, BG (84.12.99.1)",
+    timestamp: "2 mins ago",
   },
   {
-    id: "R-002",
-    user: "Unknown_IP_44",
-    type: "Multiple Failed Logins",
-    region: "Russia",
-    severity: "high",
-    time: "28 min ago",
+    index: "#449",
+    user: "crypto_whale9",
+    userId: "ID: 110-PQ1",
+    reason: "SUSPICIOUS PATTERN",
+    reasonType: "danger", // Red
+    riskScore: 88,
+    location: "Moscow, RU (92.1.2.14)",
+    timestamp: "14 mins ago",
   },
   {
-    id: "R-003",
-    user: "K-Gamer_99",
-    type: "Unusual Bet Pattern",
-    region: "South Korea",
-    severity: "medium",
-    time: "1 hr ago",
-  },
-  {
-    id: "R-004",
-    user: "Bot_Suspect_7",
-    type: "Automated Play Detected",
-    region: "Brazil",
-    severity: "medium",
-    time: "2 hrs ago",
-  },
-  {
-    id: "R-005",
-    user: "Lara_Craft",
-    type: "Velocity Limit Approaching",
-    region: "Brazil",
-    severity: "low",
-    time: "4 hrs ago",
+    index: "#102",
+    user: "lucky_strike",
+    userId: "ID: 554-ZZ3",
+    reason: "PROXY/VPN USE",
+    reasonType: "info", // Blue or gold/yellow
+    riskScore: 64,
+    location: "Amsterdam, NL (104.22.1.0)",
+    timestamp: "1 hour ago",
   },
 ];
 
-export const regionStats = [
-  { region: "North America", users: 12400, risk: "low" },
-  { region: "Europe", users: 9820, risk: "medium" },
-  { region: "Asia Pacific", users: 15400, risk: "low" },
-  { region: "South America", users: 6100, risk: "high" },
-  { region: "Middle East", users: 3200, risk: "medium" },
+export const threatDistribution = [
+  {
+    name: "Account Takeover",
+    value: 42,
+    color: "bg-red-600",
+  },
+  {
+    name: "Bonus Abuse",
+    value: 28,
+    color: "bg-blue-500",
+  },
+  {
+    name: "Money Laundering Pattern",
+    value: 15,
+    color: "bg-amber-500",
+  },
+];
+
+export const recentMitigations = [
+  {
+    id: 1,
+    title: "KYC Approved for #4412",
+    subtitle: "Processed by Automated Guardian Engine • 10m ago",
+    type: "success", // Green check icon
+  },
+  {
+    id: 2,
+    title: "Permanent Ban: IP Range 194.xx",
+    subtitle: "Manual action by Admin_Sarah • 42m ago",
+    type: "danger", // Red slash icon
+  },
+  {
+    id: 3,
+    title: "Mandatory Reset: 12 Flagged Users",
+    subtitle: "Bulk security trigger • 1h 05m ago",
+    type: "warning", // Orange sync icon
+  },
 ];

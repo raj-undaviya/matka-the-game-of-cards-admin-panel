@@ -1,102 +1,121 @@
 import { useState } from "react";
-import Slider from "@mui/material/Slider";
-import TextField from "@mui/material/TextField";
-import { RotateCcw } from "lucide-react";
+import { Download, Plus } from "lucide-react";
 import PageContainer from "@/components/ui/PageContainer";
 import PageHeader from "@/components/ui/PageHeader";
-import Button from "@/components/ui/Button";
-import CountdownTimer from "@/components/charts/CountdownTimer";
-import { jackpotConfig, countdownTarget } from "@/data/jackpotData";
+
+// Reusable jackpot components
+import ActivePoolCard from "@/components/AdminJackpot/ActivePoolCard";
+import NextDrawCard from "@/components/AdminJackpot/NextDrawCard";
+import RecentWinnersCard from "@/components/AdminJackpot/RecentWinnersCard";
+import JackpotConfigCard from "@/components/AdminJackpot/JackpotConfigCard";
+
+// Mock Data
+import {
+  jackpotStats,
+  countdownTarget,
+  recentWinners,
+  jackpotConfig,
+} from "@/data/jackpotData";
 
 export default function AdminJackpotPage() {
-  const [incrementRate, setIncrementRate] = useState(jackpotConfig.incrementRate);
-  const [triggerThreshold, setTriggerThreshold] = useState(jackpotConfig.triggerThreshold);
+  // Config parameters state
+  const [houseEdge, setHouseEdge] = useState(jackpotConfig.houseEdgeContribution);
+  const [minEntry, setMinEntry] = useState(jackpotConfig.minEntry);
+  const [seedAmount, setSeedAmount] = useState(jackpotConfig.seedAmount);
+  const [maxPayout, setMaxPayout] = useState(jackpotConfig.maxPayoutMultiplier);
+  const [drawFrequency, setDrawFrequency] = useState(jackpotConfig.drawFrequency);
+  const [autoSeed, setAutoSeed] = useState(jackpotConfig.autoSeedEnabled);
+
+  const handleResetConfig = () => {
+    setHouseEdge(jackpotConfig.houseEdgeContribution);
+    setMinEntry(jackpotConfig.minEntry);
+    setSeedAmount(jackpotConfig.seedAmount);
+    setMaxPayout(jackpotConfig.maxPayoutMultiplier);
+    setDrawFrequency(jackpotConfig.drawFrequency);
+    setAutoSeed(jackpotConfig.autoSeedEnabled);
+  };
+
+  const handleSaveConfig = () => {
+    alert("Configuration saved successfully.");
+  };
+
+  // Header action buttons
+  const headerActions = (
+    <div className="flex flex-wrap gap-3 items-center">
+      {/* Export Report Button */}
+      <button
+        type="button"
+        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+        onClick={() => alert("Jackpot report export initiated.")}
+      >
+        <Download className="h-4 w-4 text-slate-500" />
+        Export Report
+      </button>
+
+      {/* New Prize Pool Button */}
+      <button
+        type="button"
+        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+        onClick={() => alert("Setup dialogue opened for a new prize pool.")}
+      >
+        <Plus className="h-4 w-4" />
+        New Prize Pool
+      </button>
+    </div>
+  );
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Jackpot Management"
-        subtitle="Configure the global mega pool, countdown, and payout triggers."
-      />
-
-      <div className="bg-white rounded-2xl border border-gray-200 p-8 md:p-10 shadow-sm text-center">
-        <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "var(--text-light-color)" }}>
-          {jackpotConfig.poolLabel}
-        </p>
-        <h2
-          className="mt-2 text-4xl md:text-5xl font-bold"
-          style={{ color: "var(--primary-color)" }}
-        >
-          {jackpotConfig.poolAmount}
-        </h2>
-        <p className="mt-3 text-sm" style={{ color: "var(--text-light-color)" }}>
-          Last winner: <strong>{jackpotConfig.lastWinner}</strong> — {jackpotConfig.lastWinAmount}
-        </p>
-
-        <div className="mt-10 pt-8 border-t border-gray-100">
-          <p className="text-sm font-semibold mb-6" style={{ color: "var(--text-light-color)" }}>
-            Next Draw Countdown
-          </p>
-          <CountdownTimer target={countdownTarget} />
-        </div>
+      {/* Title Header with actions */}
+      <div className="mb-6">
+        <PageHeader
+          title="Jackpot Management"
+          subtitle="Real-time control and configuration for global prize pools."
+          actions={headerActions}
+        />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-6">
-          <h3 className="text-lg font-semibold" style={{ color: "var(--text-color)" }}>
-            Pool Configuration
-          </h3>
-
-          <div>
-            <label className="text-sm font-medium" style={{ color: "var(--text-light-color)" }}>
-              Increment Rate ({incrementRate}%)
-            </label>
-            <Slider
-              value={incrementRate}
-              onChange={(_, v) => setIncrementRate(v)}
-              min={0.5}
-              max={10}
-              step={0.1}
-              color="primary"
-              className="mt-2"
+      {/* Grid Layout spacing */}
+      <div className="space-y-6">
+        {/* Row 1: Active Pool (2/3 width) and Next Draw Sequence (1/3 width) */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <ActivePoolCard
+              poolAmount={jackpotStats.poolAmount}
+              growthTrend={jackpotStats.growthTrend}
+              targetAmount={jackpotStats.targetAmount}
+              totalEntries={jackpotStats.totalEntries}
+              avgContribution={jackpotStats.avgContribution}
+              trendValues={jackpotStats.trendValues}
             />
           </div>
-
-          <TextField
-            fullWidth
-            label="Trigger Threshold ($)"
-            type="number"
-            value={triggerThreshold}
-            onChange={(e) => setTriggerThreshold(Number(e.target.value))}
-          />
+          <div className="lg:col-span-1">
+            <NextDrawCard targetDate={countdownTarget} />
+          </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <h3 className="text-lg font-semibold" style={{ color: "var(--text-color)" }}>
-              Manual Actions
-            </h3>
-            <p className="mt-2 text-sm" style={{ color: "var(--text-light-color)" }}>
-              Reset the global pool or force an early draw. These actions are logged and require
-              super-admin approval in production.
-            </p>
+        {/* Row 2: Recent Global Winners (2/3 width) and Config Parameters (1/3 width) */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <RecentWinnersCard winners={recentWinners} />
           </div>
-
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <Button variant="secondary" fullWidth>
-              Force Early Draw
-            </Button>
-            <Button
-              variant="primary"
-              startIcon={<RotateCcw size={18} />}
-              fullWidth
-              sx={{
-                bgcolor: "error.main",
-                "&:hover": { bgcolor: "error.dark" },
-              }}
-            >
-              Reset Pool
-            </Button>
+          <div className="lg:col-span-1">
+            <JackpotConfigCard
+              houseEdge={houseEdge}
+              onChangeHouseEdge={setHouseEdge}
+              minEntry={minEntry}
+              onChangeMinEntry={setMinEntry}
+              seedAmount={seedAmount}
+              onChangeSeedAmount={setSeedAmount}
+              maxPayoutMultiplier={maxPayout}
+              onChangeMaxPayout={setMaxPayout}
+              drawFrequency={drawFrequency}
+              onChangeDrawFrequency={setDrawFrequency}
+              autoSeedEnabled={autoSeed}
+              onChangeAutoSeed={setAutoSeed}
+              onSave={handleSaveConfig}
+              onReset={handleResetConfig}
+            />
           </div>
         </div>
       </div>

@@ -1,18 +1,6 @@
+// Policies editing component
 import { useState, useEffect } from "react";
-import {
-  Bold,
-  Italic,
-  Clock,
-  List,
-  ListOrdered,
-  Quote,
-  Undo,
-  Redo,
-  Palette,
-  Save,
-  Type,
-  CheckCircle,
-} from "lucide-react";
+import { Bold, Italic, Clock, List, ListOrdered, Quote, Undo, Redo, Palette, Save, Type, CheckCircle } from "lucide-react";
 import SectionCard from "@/components/shared/SectionCard";
 import Tabs from "@/components/shared/Tabs";
 import { policyTabs, policyDocuments } from "@/data/policiesData";
@@ -263,11 +251,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBold().run()}
-                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${
-                  editor.isActive("bold")
+                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${editor.isActive("bold")
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Bold"
               >
                 <Bold size={15} />
@@ -275,11 +262,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleItalic().run()}
-                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${
-                  editor.isActive("italic")
+                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${editor.isActive("italic")
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Italic"
               >
                 <Italic size={15} />
@@ -294,11 +280,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().setParagraph().run()}
-                className={`h-8 px-2 text-xs font-semibold rounded-lg transition-default ${
-                  editor.isActive("paragraph")
+                className={`h-8 px-2 text-xs font-semibold rounded-lg transition-default ${editor.isActive("paragraph")
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Paragraph"
               >
                 Normal
@@ -306,11 +291,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                className={`h-8 px-2 text-xs font-bold rounded-lg transition-default ${
-                  editor.isActive("heading", { level: 2 })
+                className={`h-8 px-2 text-xs font-bold rounded-lg transition-default ${editor.isActive("heading", { level: 2 })
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Heading 2"
               >
                 H2
@@ -318,11 +302,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                className={`h-8 px-2 text-xs font-bold rounded-lg transition-default ${
-                  editor.isActive("heading", { level: 3 })
+                className={`h-8 px-2 text-xs font-bold rounded-lg transition-default ${editor.isActive("heading", { level: 3 })
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Heading 3"
               >
                 H3
@@ -330,11 +313,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-                className={`h-8 px-2 text-xs font-bold rounded-lg transition-default ${
-                  editor.isActive("heading", { level: 4 })
+                className={`h-8 px-2 text-xs font-bold rounded-lg transition-default ${editor.isActive("heading", { level: 4 })
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Heading 4"
               >
                 H4
@@ -377,11 +359,10 @@ export default function PolicyDocumentPanel() {
                     key={color.value}
                     type="button"
                     onClick={() => editor.chain().focus().setColor(color.value).run()}
-                    className={`h-5 w-5 rounded-full border transition-all ${
-                      isActive
+                    className={`h-5 w-5 rounded-full border transition-all ${isActive
                         ? "ring-2 ring-emerald-500 ring-offset-1 scale-110 border-transparent"
                         : "border-gray-200 hover:scale-105"
-                    }`}
+                      }`}
                     style={{ backgroundColor: color.value }}
                     title={color.name}
                   />
@@ -409,11 +390,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
-                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${
-                  editor.isActive("bulletList")
+                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${editor.isActive("bulletList")
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Bullet List"
               >
                 <List size={15} />
@@ -421,11 +401,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${
-                  editor.isActive("orderedList")
+                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${editor.isActive("orderedList")
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Numbered List"
               >
                 <ListOrdered size={15} />
@@ -433,11 +412,10 @@ export default function PolicyDocumentPanel() {
               <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${
-                  editor.isActive("blockquote")
+                className={`h-8 w-8 rounded-lg grid place-items-center transition-default ${editor.isActive("blockquote")
                     ? "bg-emerald-100 text-emerald-700"
                     : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                }`}
+                  }`}
                 title="Callout (Blockquote)"
               >
                 <Quote size={15} />

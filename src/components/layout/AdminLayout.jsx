@@ -11,7 +11,10 @@ export default function AdminLayout({ open, setOpen }) {
       <AdminSidebar open={open} setOpen={setOpen} />
 
       <div className="flex flex-1 flex-col min-w-0">
-        <AdminTopbar setOpen={setOpen} />
+        {/* applied lg for topbar work with responsive also */}
+        <div className="lg:ml-64 ">
+          <AdminTopbar setOpen={setOpen} />
+        </div>
         <Outlet />
       </div>
     </div>

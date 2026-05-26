@@ -6,6 +6,10 @@ export const jackpotStats = {
   totalEntries: "1.84M",
   avgContribution: "$0.14",
   trendValues: [35, 45, 25, 60, 80, 50, 95], // height values for the 7-day trend bar graph
+  uniquePlayers: "42,801",
+  avgPayout: "$18,402",
+  burnRate: "0.08%",
+  reserveRatio: "114%",
 };
 
 // Target date is exactly 5 hours from the user's current execution time

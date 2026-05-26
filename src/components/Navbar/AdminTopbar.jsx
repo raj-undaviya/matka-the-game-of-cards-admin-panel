@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Bell, HelpCircle, Menu, Settings } from "lucide-react";
 import TopbarSearch from "@/components/Navbar/TopbarSearch";
+import { useAuth } from "@/context/AuthContext";
 
 export function AdminTopbar({ setOpen }) {
   const [searchExpanded, setSearchExpanded] = useState(false);
+  const { user } = useAuth();
 
   return (
     <header
@@ -66,13 +68,13 @@ export function AdminTopbar({ setOpen }) {
           <div className="hidden sm:flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-semibold leading-tight" style={{ color: "var(--text-color)" }}>
-                Admin User
+                {user?.name || "Admin User"}
               </p>
               <p
                 className="text-[10px] font-bold uppercase tracking-wider"
                 style={{ color: "var(--text-light-color)" }}
               >
-                Super Admin
+                {user?.role || "Super Admin"}
               </p>
             </div>
             <div
@@ -82,7 +84,7 @@ export function AdminTopbar({ setOpen }) {
                 color: "#fff",
               }}
             >
-              AU
+              {user?.avatar || "AU"}
             </div>
           </div>
         </div>

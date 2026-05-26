@@ -7,27 +7,42 @@ import AdminGamesPage from "@/pages/AdminGamesPage";
 import AdminJackpotPage from "@/pages/AdminJackpotPage";
 import AdminRiskPage from "@/pages/AdminRiskPage";
 import AdminPoliciesPage from "@/pages/AdminPoliciesPage";
+import LoginPage from "@/pages/LoginPage";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { AuthProvider } from "@/context/AuthContext";
 
 function App() {
   const [open, setOpen] = useState(false);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to="/admin/overview" replace />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Login Route */}
+          <Route path="/login" element={<LoginPage />} />
 
-        <Route
-          element={<AdminLayout open={open} setOpen={setOpen} />}
-        >
-          <Route path="/admin/overview" element={<AdminDashboardPage />} />
-          <Route path="/admin/users" element={<AdminUsersPage />} />
-          <Route path="/admin/games" element={<AdminGamesPage />} />
-          <Route path="/admin/jackpot" element={<AdminJackpotPage />} />
-          <Route path="/admin/risk" element={<AdminRiskPage />} />
-          <Route path="/admin/policies" element={<AdminPoliciesPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          {/* Root Redirect to Overview */}
+          <Route path="/" element={<Navigate to="/admin/overview" replace />} />
+
+          {/* Protected Admin Console Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route
+              element={<AdminLayout open={open} setOpen={setOpen} />}
+            >
+              <Route path="/admin/overview" element={<AdminDashboardPage />} />
+              <Route path="/admin/users" element={<AdminUsersPage />} />
+              <Route path="/admin/games" element={<AdminGamesPage />} />
+              <Route path="/admin/jackpot" element={<AdminJackpotPage />} />
+              <Route path="/admin/risk" element={<AdminRiskPage />} />
+              <Route path="/admin/policies" element={<AdminPoliciesPage />} />
+            </Route>
+          </Route>
+
+          {/* Catch-all redirect to home/login */}
+          <Route path="*" element={<Navigate to="/admin/overview" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

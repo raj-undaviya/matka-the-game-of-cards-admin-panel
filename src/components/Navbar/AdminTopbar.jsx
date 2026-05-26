@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Bell, HelpCircle, Menu, Settings } from "lucide-react";
 import TopbarSearch from "@/components/Navbar/TopbarSearch";
+import NotificationMenu from "@/components/Navbar/NotificationMenu";
+import ProfileDropdown from "./ProfileDropdown";
 import { useAuth } from "@/context/AuthContext";
 
 export function AdminTopbar({ setOpen }) {
@@ -21,9 +23,8 @@ export function AdminTopbar({ setOpen }) {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className={`lg:hidden shrink-0 transition-all duration-300 ${
-            searchExpanded ? "max-md:opacity-0 max-md:w-0 max-md:overflow-hidden max-md:pointer-events-none" : ""
-          }`}
+          className={`lg:hidden shrink-0 transition-all duration-300 ${searchExpanded ? "max-md:opacity-0 max-md:w-0 max-md:overflow-hidden max-md:pointer-events-none" : ""
+            }`}
           style={{ color: "var(--text-light-color)" }}
         >
           <Menu className="h-6 w-6" />
@@ -32,26 +33,32 @@ export function AdminTopbar({ setOpen }) {
         <TopbarSearch onExpandedChange={setSearchExpanded} />
 
         <div
-          className={`flex items-center gap-1 sm:gap-2 shrink-0 transition-all duration-300 ${
-            searchExpanded
-              ? "max-md:opacity-0 max-md:w-0 max-md:overflow-hidden max-md:pointer-events-none"
-              : ""
-          }`}
+          className={`flex items-center gap-1 sm:gap-2 shrink-0 transition-all duration-300 ${searchExpanded
+            ? "max-md:opacity-0 max-md:w-0 max-md:overflow-hidden max-md:pointer-events-none"
+            : ""
+            }`}
         >
-          <button
+
+          {/* without Menu importedx */}
+          {/* <button
             type="button"
             className="h-10 w-10 rounded-lg grid place-items-center transition-default"
             style={{ color: "var(--text-light-color)" }}
           >
             <Bell className="h-5 w-5" />
-          </button>
-          <button
+          </button> */}
+
+          {/* with menu imported */}
+          <NotificationMenu />
+
+          {/* <button
             type="button"
             className="h-10 w-10 rounded-lg grid place-items-center transition-default"
             style={{ color: "var(--text-light-color)" }}
           >
             <HelpCircle className="h-5 w-5" />
-          </button>
+          </button> */}
+
           <button
             type="button"
             className="h-10 w-10 rounded-lg grid place-items-center transition-default"
@@ -65,7 +72,7 @@ export function AdminTopbar({ setOpen }) {
             style={{ backgroundColor: "var(--border-color)" }}
           />
 
-          <div className="hidden sm:flex items-center gap-3">
+          {/* <div className="hidden sm:flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-semibold leading-tight" style={{ color: "var(--text-color)" }}>
                 {user?.name || "Admin User"}
@@ -86,7 +93,16 @@ export function AdminTopbar({ setOpen }) {
             >
               {user?.avatar || "AU"}
             </div>
-          </div>
+          </div> */}
+<div
+  className="p-4 border-t relative"
+  style={{
+    borderColor: "var(--border-color)",
+  }}
+>
+  <ProfileDropdown />
+</div>
+
         </div>
       </div>
     </header>

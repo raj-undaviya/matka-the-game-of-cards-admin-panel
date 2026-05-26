@@ -25,9 +25,8 @@ export function AdminSidebar({ open, setOpen }) {
       )}
 
       <aside
-        className={`fixed lg:static z-50 top-0 left-0 min-h-screen w-64 flex flex-col transition-default ${
-          open ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`fixed z-50 top-0 left-0 h-screen w-64 flex flex-col transition-all duration-300 ${open ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0`}
         style={{
           backgroundColor: "var(--background-color)",
           border: "1px solid var(--border-color)",

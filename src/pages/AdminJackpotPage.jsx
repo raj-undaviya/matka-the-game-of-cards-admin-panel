@@ -8,6 +8,7 @@ import ActivePoolCard from "@/components/AdminJackpot/ActivePoolCard";
 import NextDrawCard from "@/components/AdminJackpot/NextDrawCard";
 import RecentWinnersCard from "@/components/AdminJackpot/RecentWinnersCard";
 import JackpotConfigCard from "@/components/AdminJackpot/JackpotConfigCard";
+import JackpotStatsRow from "@/components/AdminJackpot/JackpotStatsRow";
 
 // Mock Data
 import {
@@ -75,6 +76,14 @@ export default function AdminJackpotPage() {
         />
       </div>
 
+      {/* Row 1: Metrics summary cards */}
+      <JackpotStatsRow
+        uniquePlayers={jackpotStats.uniquePlayers}
+        avgPayout={jackpotStats.avgPayout}
+        burnRate={jackpotStats.burnRate}
+        reserveRatio={jackpotStats.reserveRatio}
+      />
+
       {/* Grid Layout spacing */}
       <div className="space-y-6">
         {/* Row 1: Active Pool (2/3 width) and Next Draw Sequence (1/3 width) */}
@@ -118,6 +127,7 @@ export default function AdminJackpotPage() {
             />
           </div>
         </div>
+
       </div>
     </PageContainer>
   );

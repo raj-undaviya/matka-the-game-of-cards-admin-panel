@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 
 export default function DataTable({ columns, data }) {
   return (
-    <TableContainer className="overflow-x-auto hide-scrollbar">
+    <TableContainer className="overflow-x-auto">
       <Table>
         <TableHead>
           <TableRow>

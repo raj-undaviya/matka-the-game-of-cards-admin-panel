@@ -62,13 +62,6 @@ body {
     font-family: var(--font-family);
     background-color: var(--background-color);
     color: var(--text-color);
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-    display: none;
 }
 
 /* =========================
@@ -117,19 +110,8 @@ body::-webkit-scrollbar {
 }
 
 /* =========================
-   HIDE SCROLLBAR (global + utility)
+   HIDE SCROLLBAR utility
 ========================== */
-
-*,
-*::before,
-*::after {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-*::-webkit-scrollbar {
-    display: none;
-}
 
 .hide-scrollbar {
     scrollbar-width: none;

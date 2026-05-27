@@ -20,7 +20,8 @@ import {
 export default function AdminRiskPage() {
   // Page Header Action Buttons
   const headerActions = (
-    <div className="flex flex-wrap gap-3 items-center">
+    <div className="flex flex-wrap gap-3 items-center justify-start lg:justify-end">
+
       {/* Trigger KYC Re-verification Button */}
       <button
         type="button"

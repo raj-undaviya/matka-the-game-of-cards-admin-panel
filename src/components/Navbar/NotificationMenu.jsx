@@ -10,20 +10,22 @@ import useClickOutside from "@/hooks/useClickOutside";
 
 export default function NotificationMenu() {
     const [open, setOpen] = useState(false);
-    const dropdownRef = useRef();
+    const dropdownRef = useRef(null);
 
     useClickOutside(dropdownRef, () => setOpen(false));
 
     // Lock body scroll on mobile when dropdown is open
     useEffect(() => {
         if (open) {
-            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            const scrollbarWidth =
+                window.innerWidth - document.documentElement.clientWidth;
             document.body.style.overflow = "hidden";
             document.body.style.paddingRight = `${scrollbarWidth}px`;
         } else {
             document.body.style.overflow = "";
             document.body.style.paddingRight = "";
         }
+
         return () => {
             document.body.style.overflow = "";
             document.body.style.paddingRight = "";
@@ -67,16 +69,18 @@ export default function NotificationMenu() {
 
     return (
         <div className="relative" ref={dropdownRef}>
-
             {/* Notification Button */}
             <button
                 onClick={() => setOpen(!open)}
                 className="relative p-2 rounded-full hover:bg-gray-100 transition"
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={open}
             >
                 <Bell size={22} />
 
                 {/* Red Notification Dot */}
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </button>
 
             {/* Mobile backdrop overlay */}
@@ -99,28 +103,29 @@ export default function NotificationMenu() {
                         max-h-[calc(100vh-6rem)]
                         animate-in fade-in zoom-in duration-200
                     `}
+                    role="menu"
                 >
-
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4">
                         <h2 className="font-semibold text-base sm:text-lg">
                             Notifications
                         </h2>
 
-                        <button className="text-green-600 text-xs sm:text-sm font-medium hover:underline">
+                        <button
+                            className="text-green-600 text-xs sm:text-sm font-medium hover:underline"
+                            type="button"
+                        >
                             MARK ALL AS READ
                         </button>
                     </div>
 
                     {/* Notification List */}
                     <div className="max-h-[320px] sm:max-h-[420px] overflow-y-auto">
-
                         {notifications.map((item, index) => (
                             <div
                                 key={index}
                                 className="flex gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 hover:bg-gray-50 transition cursor-pointer relative"
                             >
-
                                 {/* Icon */}
                                 <div
                                     className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${item.color}`}
@@ -144,15 +149,16 @@ export default function NotificationMenu() {
                                 </div>
 
                                 {/* Unread Dot */}
-                                <div
-                                    className={`w-2 h-2 rounded-full mt-2 shrink-0 ${item.dot}`}
-                                ></div>
+                                <div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${item.dot}`} />
                             </div>
                         ))}
                     </div>
 
                     {/* Footer */}
-                    <button className="w-full py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-600 hover:bg-gray-50 border-t border-gray-100">
+                    <button
+                        className="w-full py-3 sm:py-4 text-xs sm:text-sm font-semibold text-gray-600 hover:bg-gray-50 border-t border-gray-100"
+                        type="button"
+                    >
                         View all notifications
                     </button>
                 </div>
@@ -160,3 +166,4 @@ export default function NotificationMenu() {
         </div>
     );
 }
+

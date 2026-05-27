@@ -11,7 +11,7 @@ export default function PageHeader({ eyebrow, title, subtitle, actions }) {
           </p>
         )}
         <h1
-          className="text-2xl md:text-3xl font-bold"
+          className="text-2xl md:text-2xl font-bold"
           style={{ color: "var(--text-color)" }}
         >
           {title}

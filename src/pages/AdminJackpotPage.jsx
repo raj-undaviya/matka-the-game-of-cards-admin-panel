@@ -42,7 +42,8 @@ export default function AdminJackpotPage() {
 
   // Header action buttons
   const headerActions = (
-    <div className="flex flex-wrap gap-3 items-center">
+    <div className="flex flex-wrap gap-3 items-center justify-start lg:justify-end">
+
       {/* Export Report Button */}
       <button
         type="button"

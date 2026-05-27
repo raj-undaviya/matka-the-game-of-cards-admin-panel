@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Bell, HelpCircle, Menu, Settings } from "lucide-react";
+import { Menu, Settings } from "lucide-react";
+
 import TopbarSearch from "@/components/Navbar/TopbarSearch";
 import NotificationMenu from "@/components/Navbar/NotificationMenu";
 import ProfileDropdown from "./ProfileDropdown";
@@ -40,13 +41,13 @@ export function AdminTopbar({ setOpen }) {
         >
           <NotificationMenu />
 
-          <button
+          {/* <button
             type="button"
             className="h-10 w-10 rounded-lg grid place-items-center transition-default"
             style={{ color: "var(--text-light-color)" }}
           >
             <Settings className="h-5 w-5" />
-          </button>
+          </button> */}
 
           <div
             className="hidden sm:block h-6 w-px mx-1 sm:mx-2"

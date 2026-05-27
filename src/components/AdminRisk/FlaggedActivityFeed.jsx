@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useState, useMemo, useRef } from "react";
 import { RotateCw, ChevronDown, Layers, Activity, Globe, ArrowRight } from "lucide-react";
 import DataTable from "@/components/shared/DataTable";
+import useClickOutside from "@/hooks/useClickOutside";
 
 export default function FlaggedActivityFeed({ data = [] }) {
   const [filter, setFilter] = useState("High Risk Only");
   const [isRefreshing, setIsRefreshing] = useState(false);
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef();
+
+  useClickOutside(dropdownRef, () => setDropdownOpen(false));
+
+  const filteredData = useMemo(() => {
+    if (filter === "High Risk Only") {
+      return data.filter((item) => item.riskScore >= 80);
+    }
+    return data;
+  }, [data, filter]);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -147,10 +157,10 @@ export default function FlaggedActivityFeed({ data = [] }) {
           </div> */}
 
           {/* Custom Premium Dropdown */}
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 px-4 py-2.5 rounded-xl border border-slate-200 transition-all"
+              className="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-xs font-semibold text-slate-700 px-4 py-2.5 rounded-xl border border-slate-200 transition-all cursor-pointer"
             >
               <span>Filter: {filter}</span>
               <ChevronDown
@@ -168,7 +178,7 @@ export default function FlaggedActivityFeed({ data = [] }) {
                       setFilter(item);
                       setDropdownOpen(false);
                     }}
-                    className={`w-full text-left px-4 py-3 text-xs font-medium transition-colors
+                    className={`w-full text-left px-4 py-3 text-xs font-medium transition-colors cursor-pointer
             ${filter === item
                         ? "bg-blue-50 text-blue-600"
                         : "text-slate-700 hover:bg-slate-50"
@@ -194,7 +204,7 @@ export default function FlaggedActivityFeed({ data = [] }) {
 
       {/* Reusable DataTable Component */}
       <div className="overflow-hidden rounded-xl border border-slate-100">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={filteredData} />
       </div>
 
       {/* Footer Link */}

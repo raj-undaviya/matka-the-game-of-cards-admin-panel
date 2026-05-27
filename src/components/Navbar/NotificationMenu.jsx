@@ -6,30 +6,13 @@ import {
     Trophy,
     Fingerprint,
 } from "lucide-react";
+import useClickOutside from "@/hooks/useClickOutside";
 
 export default function NotificationMenu() {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef();
 
-    // Close when click outside
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target)
-            ) {
-                setOpen(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () =>
-            document.removeEventListener(
-                "mousedown",
-                handleClickOutside
-            );
-    }, []);
+    useClickOutside(dropdownRef, () => setOpen(false));
 
     // Lock body scroll on mobile when dropdown is open
     useEffect(() => {

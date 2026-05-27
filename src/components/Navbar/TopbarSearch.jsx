@@ -57,7 +57,7 @@ export default function TopbarSearch({ onExpandedChange }) {
     <>
     {expanded && (
       <div
-        className="md:hidden fixed inset-0 top-17.5 z-40 bg-slate-900/15 backdrop-blur-[3px]"
+        className="md:hidden fixed inset-0 top-16 z-40 bg-slate-900/15 backdrop-blur-[3px]"
         aria-hidden
         onClick={handleCollapse}
       />

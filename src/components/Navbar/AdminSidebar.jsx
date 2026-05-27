@@ -69,37 +69,7 @@ export function AdminSidebar({ open, setOpen }) {
           ))}
         </nav>
 
-        <div className="p-4 flex items-center justify-between border-t" style={{ borderColor: "var(--border-color)" }}>
-          <div className="flex items-center gap-3 min-w-0">
-            <div
-              className="h-10 w-10 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-              style={{
-                backgroundColor: "var(--primary-light-color)",
-                color: "var(--primary-color)",
-              }}
-            >
-              {user?.avatar || "AU"}
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold truncate" style={{ color: "var(--text-color)" }}>
-                {user?.name || "Admin User"}
-              </p>
-              <p className="text-xs truncate" style={{ color: "var(--text-light-color)" }}>
-                {user?.role || "Super Admin"}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={logout}
-            className="h-8 w-8 rounded-lg grid place-items-center hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
-            title="Sign Out"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="px-4 pb-4">
+        <div className="mt-auto p-4 space-y-4">
           <div
             className="rounded-xl border p-4"
             style={{

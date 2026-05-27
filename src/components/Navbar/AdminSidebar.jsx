@@ -1,6 +1,7 @@
-import { LayoutGrid, Users, Gamepad2, Dice5, ShieldAlert, FileText, X, Server, LogOut } from "lucide-react";
+import { LayoutGrid, Users, Gamepad2, Dice5, ShieldAlert, FileText, X, Server } from "lucide-react";
+
 import { NavLink } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+
 
 const nav = [
   { path: "/admin/overview", label: "Overview", icon: LayoutGrid },
@@ -12,7 +13,7 @@ const nav = [
 ];
 
 export function AdminSidebar({ open, setOpen }) {
-  const { user, logout } = useAuth();
+
 
   return (
     <>

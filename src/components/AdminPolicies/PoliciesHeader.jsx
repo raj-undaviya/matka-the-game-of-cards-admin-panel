@@ -7,9 +7,10 @@ export default function PoliciesHeader() {
     <PageHeader
       eyebrow="Regulatory Control"
       title="Policies & Compliance"
-      subtitle="Manage legal frameworks, document versions, and cross-border regulatory standards."
+      subtitle="Manage legal frameworks, document versions."
       actions={
         <>
+        
           <Button variant="secondary" startIcon={<Download size={18} />}>
             Export Report
           </Button>

@@ -38,26 +38,7 @@ export function AdminTopbar({ setOpen }) {
             : ""
             }`}
         >
-
-          {/* without Menu importedx */}
-          {/* <button
-            type="button"
-            className="h-10 w-10 rounded-lg grid place-items-center transition-default"
-            style={{ color: "var(--text-light-color)" }}
-          >
-            <Bell className="h-5 w-5" />
-          </button> */}
-
-          {/* with menu imported */}
           <NotificationMenu />
-
-          {/* <button
-            type="button"
-            className="h-10 w-10 rounded-lg grid place-items-center transition-default"
-            style={{ color: "var(--text-light-color)" }}
-          >
-            <HelpCircle className="h-5 w-5" />
-          </button> */}
 
           <button
             type="button"
@@ -68,40 +49,12 @@ export function AdminTopbar({ setOpen }) {
           </button>
 
           <div
-            className="hidden sm:block h-6 w-px mx-2"
+            className="hidden sm:block h-6 w-px mx-1 sm:mx-2"
             style={{ backgroundColor: "var(--border-color)" }}
           />
 
-          {/* <div className="hidden sm:flex items-center gap-3">
-            <div className="text-right">
-              <p className="text-sm font-semibold leading-tight" style={{ color: "var(--text-color)" }}>
-                {user?.name || "Admin User"}
-              </p>
-              <p
-                className="text-[10px] font-bold uppercase tracking-wider"
-                style={{ color: "var(--text-light-color)" }}
-              >
-                {user?.role || "Super Admin"}
-              </p>
-            </div>
-            <div
-              className="h-10 w-10 rounded-full flex items-center justify-center text-xs font-bold overflow-hidden"
-              style={{
-                backgroundColor: "var(--secondary-color)",
-                color: "#fff",
-              }}
-            >
-              {user?.avatar || "AU"}
-            </div>
-          </div> */}
-<div
-  className="p-4 border-t relative"
-  style={{
-    borderColor: "var(--border-color)",
-  }}
->
-  <ProfileDropdown />
-</div>
+          {/* Profile Dropdown — inline in the topbar */}
+          <ProfileDropdown />
 
         </div>
       </div>

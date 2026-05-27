@@ -49,7 +49,7 @@ export default function AdminDashboardPage() {
       <ClusterSection />
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+        <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-200 p-4 md:p-6 shadow-sm">
           <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--text-color)" }}>
             Recent Platform Activity
           </h2>

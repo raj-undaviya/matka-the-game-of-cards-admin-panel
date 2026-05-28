@@ -42,12 +42,12 @@ export default function AdminJackpotPage() {
 
   // Header action buttons
   const headerActions = (
-    <div className="flex flex-wrap gap-3 items-center justify-start lg:justify-end">
+    <div className="flex w-full flex-wrap gap-2 sm:gap-3 items-center justify-start lg:justify-end">
 
       {/* Export Report Button */}
       <button
         type="button"
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+        className="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
         onClick={() => alert("Jackpot report export initiated.")}
       >
         <Download className="h-4 w-4 text-slate-500" />
@@ -57,7 +57,7 @@ export default function AdminJackpotPage() {
       {/* New Prize Pool Button */}
       <button
         type="button"
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+        className="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
         onClick={() => alert("Setup dialogue opened for a new prize pool.")}
       >
         <Plus className="h-4 w-4" />
@@ -69,7 +69,7 @@ export default function AdminJackpotPage() {
   return (
     <PageContainer>
       {/* Title Header with actions */}
-      <div className="mb-6">
+      <div className="mb-4 md:mb-6 min-w-0">
         <PageHeader
           title="Jackpot Management"
           subtitle="Real-time control and configuration for global prize pools."
@@ -86,10 +86,10 @@ export default function AdminJackpotPage() {
       />
 
       {/* Grid Layout spacing */}
-      <div className="space-y-6">
+      <div className="min-w-0 space-y-4 md:space-y-6">
         {/* Row 1: Active Pool (2/3 width) and Next Draw Sequence (1/3 width) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+        <div className="grid min-w-0 grid-cols-1 gap-4 md:gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(17rem,1fr)]">
+          <div className="min-w-0">
             <ActivePoolCard
               poolAmount={jackpotStats.poolAmount}
               growthTrend={jackpotStats.growthTrend}
@@ -99,17 +99,17 @@ export default function AdminJackpotPage() {
               trendValues={jackpotStats.trendValues}
             />
           </div>
-          <div className="lg:col-span-1">
+          <div className="min-w-0">
             <NextDrawCard targetDate={countdownTarget} />
           </div>
         </div>
 
         {/* Row 2: Recent Global Winners (2/3 width) and Config Parameters (1/3 width) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+        <div className="grid min-w-0 grid-cols-1 gap-4 md:gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(17rem,1fr)]">
+          <div className="min-w-0">
             <RecentWinnersCard winners={recentWinners} />
           </div>
-          <div className="lg:col-span-1">
+          <div className="min-w-0">
             <JackpotConfigCard
               houseEdge={houseEdge}
               onChangeHouseEdge={setHouseEdge}

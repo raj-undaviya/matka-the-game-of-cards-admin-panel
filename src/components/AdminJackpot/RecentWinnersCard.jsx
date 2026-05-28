@@ -50,11 +50,11 @@ export default function RecentWinnersCard({ winners = [] }) {
   ];
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between h-full">
+    <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 shadow-sm flex min-w-0 flex-col justify-between h-full overflow-hidden">
       <div>
         {/* Header toolbar */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+          <div className="flex min-w-0 items-center gap-2.5">
             <h3 className="text-base font-bold text-slate-900">
               Recent Global Winners
             </h3>
@@ -79,7 +79,43 @@ export default function RecentWinnersCard({ winners = [] }) {
         </div>
 
         {/* Table data view */}
-        <div className="overflow-hidden rounded-xl border border-slate-100">
+        <div className="space-y-3 sm:hidden">
+          {winners.map((winner) => (
+            <div
+              key={winner.id}
+              className="rounded-xl border border-slate-100 bg-slate-50/40 p-3"
+            >
+              <div className="flex min-w-0 items-center gap-3">
+                <div className="h-9 w-9 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0">
+                  {winner.user.substring(0, 2).toUpperCase()}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-bold text-sm text-slate-800 truncate">
+                    {winner.user}
+                  </p>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {winner.timestamp}
+                  </p>
+                </div>
+                <span className="text-sm font-extrabold text-emerald-600 shrink-0">
+                  {winner.prize}
+                </span>
+              </div>
+
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-white text-slate-500 border border-slate-200/70">
+                  {winner.game}
+                </span>
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-100/70">
+                  <Check className="h-3.5 w-3.5" />
+                  {winner.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="hidden overflow-x-auto rounded-xl border border-slate-100 sm:block">
           <DataTable columns={columns} data={winners} />
         </div>
       </div>

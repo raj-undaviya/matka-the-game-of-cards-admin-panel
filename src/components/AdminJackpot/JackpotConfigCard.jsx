@@ -35,9 +35,9 @@ export default function JackpotConfigCard({
   onApply,
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col h-full">
+    <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 shadow-sm flex min-w-0 flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between gap-3 mb-6">
         <h3 className="text-base font-bold text-slate-900">
           Configuration Parameters
         </h3>
@@ -94,7 +94,7 @@ export default function JackpotConfigCard({
       </div>
 
       {/* Min Entry & Seed Amount Inputs */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2 gap-4 mb-6">
         <ConfigInput
           label="Min Entry (₹)"
           value={minEntry}

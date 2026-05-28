@@ -20,12 +20,12 @@ import {
 export default function AdminRiskPage() {
   // Page Header Action Buttons
   const headerActions = (
-    <div className="flex flex-wrap gap-3 items-center justify-start lg:justify-end">
+    <div className="flex w-full flex-col gap-3 items-stretch justify-start xl:w-auto xl:flex-row xl:items-center xl:justify-end">
 
       {/* Trigger KYC Re-verification Button */}
       <button
         type="button"
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+        className="inline-flex w-full items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold text-center shadow-sm transition-all duration-200 cursor-pointer xl:w-auto"
         onClick={() => alert("KYC Re-verification process triggered for flagged users.")}
       >
         <ShieldCheck className="h-4 w-4 text-slate-500" />
@@ -35,7 +35,7 @@ export default function AdminRiskPage() {
       {/* Bulk Freeze Flagged Accounts Button */}
       <button
         type="button"
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
+        className="inline-flex w-full items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold text-center shadow-sm transition-all duration-200 cursor-pointer xl:w-auto"
         onClick={() => alert("Bulk freeze action initiated.")}
       >
         <Ban className="h-4 w-4" />
@@ -47,7 +47,7 @@ export default function AdminRiskPage() {
   return (
     <PageContainer>
       {/* Page Title & Actions */}
-      <div className="mb-6">
+      <div className="mb-4 md:mb-6 min-w-0">
         <PageHeader
           title="Risk & Fraud Control"
           subtitle="Real-time threat detection and security oversight."
@@ -56,10 +56,10 @@ export default function AdminRiskPage() {
       </div>
 
       {/* Grid Layout */}
-      <div className="space-y-6">
+      <div className="min-w-0 space-y-4 md:space-y-6">
         {/* Row 1: Average Platform Risk (1/3) & Login Heatmap (2/3) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
+        <div className="grid min-w-0 grid-cols-1 gap-4 md:gap-6 xl:grid-cols-[minmax(18rem,1fr)_minmax(0,2fr)]">
+          <div className="min-w-0">
             <AverageRiskCard
               averageRisk={riskStats.averageRisk}
               riskDelta={riskStats.riskDelta}
@@ -67,22 +67,22 @@ export default function AdminRiskPage() {
               blockedIps={riskStats.blockedIps.toLocaleString()}
             />
           </div>
-          <div className="lg:col-span-2">
+          <div className="min-w-0">
             <LoginHeatmapCard />
           </div>
         </div>
 
         {/* Row 2: Flagged Activity Feed (Full Width) */}
-        <div className="w-full">
+        <div className="w-full min-w-0">
           <FlaggedActivityFeed data={flaggedActivity} />
         </div>
 
         {/* Row 3: Threat Distribution (1/2) & Recent Mitigation Actions (1/2) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
+        <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+          <div className="min-w-0">
             <ThreatDistributionCard data={threatDistribution} />
           </div>
-          <div>
+          <div className="min-w-0">
             <RecentMitigationActionsCard data={recentMitigations} />
           </div>
         </div>

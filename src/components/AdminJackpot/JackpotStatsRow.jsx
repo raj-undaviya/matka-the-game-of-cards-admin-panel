@@ -14,7 +14,7 @@ import { Users, Wallet, Flame, Shield } from "lucide-react";
  */
 function JackpotStatCard({ icon: Icon, iconBg, iconColor, label, value, unit }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 px-5 py-4 shadow-sm flex items-center gap-4 min-w-0 hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white rounded-2xl border border-gray-200 px-4 sm:px-5 py-4 shadow-sm flex items-center gap-3 sm:gap-4 min-w-0 hover:shadow-md transition-shadow duration-200">
       {/* Colored icon badge */}
       <span
         className={`flex h-11 w-11 items-center justify-center rounded-xl shrink-0 ${iconBg}`}
@@ -23,11 +23,11 @@ function JackpotStatCard({ icon: Icon, iconBg, iconColor, label, value, unit }) 
       </span>
 
       {/* Text content */}
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 truncate">
           {label}
         </p>
-        <p className="text-xl font-extrabold text-slate-900 mt-0.5 leading-tight">
+        <p className="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5 leading-tight truncate">
           {value}
           {unit && (
             <span className="text-xs font-semibold text-slate-400 ml-0.5">
@@ -89,7 +89,7 @@ export default function JackpotStatsRow({
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
       {stats.map((s) => (
         <JackpotStatCard key={s.label} {...s} />
       ))}

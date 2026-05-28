@@ -11,7 +11,7 @@ export default function AdminLayout({ open, setOpen }) {
       <AdminSidebar open={open} setOpen={setOpen} />
 
       {/* Main content area — offset by sidebar width on lg+ screens */}
-      <div className="flex flex-1 flex-col min-w-0 lg:ml-64">
+      <div className="flex flex-1 flex-col min-w-0 overflow-x-hidden lg:ml-64">
         <AdminTopbar setOpen={setOpen} />
         <Outlet />
       </div>

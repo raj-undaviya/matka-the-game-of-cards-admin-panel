@@ -97,6 +97,7 @@ export default function DeployInstanceModal({ open, onClose }) {
           to { opacity: 0; transform: translateY(8px) scale(0.98); }
         }
       `}</style>
+      
       <section
         ref={modalRef}
         className="deploy-modal-panel flex max-h-[calc(100vh-2rem)] w-full max-w-[700px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl"

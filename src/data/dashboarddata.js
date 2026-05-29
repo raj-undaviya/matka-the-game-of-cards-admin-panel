@@ -47,6 +47,8 @@ export const revenueHours = [
   "12:00 AM",
 ];
 
+export const OVERVIEW_TABLE_ROW_LIMIT = 5;
+
 export const clusters = [
   { name: "NA-WEST CLUSTER", status: "Online", ok: true },
   { name: "EU-CENTRAL CLUSTER", status: "Online", ok: true },

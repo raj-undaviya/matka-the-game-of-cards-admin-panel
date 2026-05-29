@@ -1,9 +1,13 @@
 import { useState, useMemo, useRef } from "react";
 import { RotateCw, ChevronDown, Layers, Activity, Globe, ArrowRight } from "lucide-react";
 import DataTable from "@/components/shared/DataTable";
+import TablePagination from "@/components/shared/TablePagination";
 import useClickOutside from "@/hooks/useClickOutside";
+import { FLAGGED_ACTIVITY_PAGE_SIZE } from "@/data/riskData";
 
 export default function FlaggedActivityFeed({ data = [] }) {
+  const [page, setPage] = useState(1);
+  const [jumpPage, setJumpPage] = useState("");
   const [filter, setFilter] = useState("High Risk Only");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -17,6 +21,26 @@ export default function FlaggedActivityFeed({ data = [] }) {
     }
     return data;
   }, [data, filter]);
+
+  const pageCount = Math.max(1, Math.ceil(filteredData.length / FLAGGED_ACTIVITY_PAGE_SIZE));
+  const paginated = useMemo(
+    () => filteredData.slice((page - 1) * FLAGGED_ACTIVITY_PAGE_SIZE, page * FLAGGED_ACTIVITY_PAGE_SIZE),
+    [filteredData, page]
+  );
+
+  const handlePageChange = (nextPage) => {
+    setPage(Math.min(Math.max(1, nextPage), pageCount));
+  };
+
+  const handleJumpToPage = () => {
+    const num = parseInt(jumpPage, 10);
+    if (!Number.isNaN(num) && num >= 1 && num <= pageCount) {
+      setPage(num);
+      setJumpPage("");
+    }
+  };
+
+  const resetPage = () => setPage(1);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -176,6 +200,7 @@ export default function FlaggedActivityFeed({ data = [] }) {
                     key={item}
                     onClick={() => {
                       setFilter(item);
+                      resetPage();
                       setDropdownOpen(false);
                     }}
                     className={`w-full text-left px-4 py-3 text-xs font-medium transition-colors cursor-pointer
@@ -204,8 +229,17 @@ export default function FlaggedActivityFeed({ data = [] }) {
 
       {/* Reusable DataTable Component */}
       <div className="overflow-hidden rounded-xl border border-slate-100">
-        <DataTable columns={columns} data={filteredData} />
+        <DataTable columns={columns} data={paginated} />
       </div>
+
+      <TablePagination
+        page={page}
+        pageCount={pageCount}
+        jumpPage={jumpPage}
+        onPageChange={handlePageChange}
+        onJumpPageChange={setJumpPage}
+        onJumpToPage={handleJumpToPage}
+      />
 
       {/* Footer Link */}
       <div className="mt-5 flex justify-center">

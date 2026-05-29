@@ -12,14 +12,18 @@ const riskProfiles = ["LOW", "MEDIUM", "HIGH"];
 
 export default function DeployInstanceModal({ open, onClose }) {
   const modalRef = useRef(null);
+  const regionDropdownRef = useRef(null);
   const closeTimerRef = useRef(null);
   const closingRef = useRef(false);
   const [closing, setClosing] = useState(false);
+  const [regionOpen, setRegionOpen] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState(regions[0]);
   const [riskProfile, setRiskProfile] = useState("LOW");
 
   const requestClose = useCallback(() => {
     if (closingRef.current) return;
 
+    setRegionOpen(false);
     closingRef.current = true;
     setClosing(true);
     closeTimerRef.current = window.setTimeout(() => {
@@ -32,11 +36,22 @@ export default function DeployInstanceModal({ open, onClose }) {
   useEffect(() => {
     if (!open) return undefined;
 
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
     const previousOverflow = document.body.style.overflow;
+    const previousPaddingRight = document.body.style.paddingRight;
+
+    document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+    document.body.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : previousPaddingRight;
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
+        if (regionOpen) {
+          setRegionOpen(false);
+          return;
+        }
+
         requestClose();
       }
     };
@@ -44,13 +59,28 @@ export default function DeployInstanceModal({ open, onClose }) {
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      document.documentElement.style.overflow = previousHtmlOverflow;
       document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPaddingRight;
       document.removeEventListener("keydown", handleKeyDown);
       if (closeTimerRef.current) {
         window.clearTimeout(closeTimerRef.current);
       }
     };
-  }, [open, requestClose]);
+  }, [open, regionOpen, requestClose]);
+
+  useEffect(() => {
+    if (!regionOpen) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (regionDropdownRef.current && !regionDropdownRef.current.contains(event.target)) {
+        setRegionOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [regionOpen]);
 
   if (!open) return null;
 
@@ -155,18 +185,57 @@ export default function DeployInstanceModal({ open, onClose }) {
                 <label className="mb-3 block text-xs font-black uppercase tracking-widest text-slate-800">
                   Region Selection
                 </label>
-                <div className="relative">
-                  <select
-                    defaultValue={regions[0]}
-                    className="h-14 w-full appearance-none rounded border border-slate-300 bg-white px-5 pr-12 text-base font-medium text-slate-950 outline-none transition-default focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/15"
+                <div className="relative" ref={regionDropdownRef}>
+                  <button
+                    type="button"
+                    className={`flex h-14 w-full items-center justify-between rounded border bg-white px-5 text-left text-base font-medium text-slate-950 outline-none transition-default ${
+                      regionOpen
+                        ? "border-emerald-600 ring-2 ring-emerald-500/15"
+                        : "border-slate-300 hover:border-emerald-500"
+                    }`}
+                    aria-haspopup="listbox"
+                    aria-expanded={regionOpen}
+                    onClick={() => setRegionOpen((current) => !current)}
                   >
-                    {regions.map((region) => (
-                      <option key={region} value={region}>
-                        {region}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-600" />
+                    <span className="min-w-0 truncate pr-4">{selectedRegion}</span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 text-slate-600 transition-default ${
+                        regionOpen ? "rotate-180 text-emerald-700" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {regionOpen && (
+                    <div
+                      className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded border border-slate-200 bg-white shadow-2xl"
+                      role="listbox"
+                      aria-label="Region Selection"
+                    >
+                      {regions.map((region) => {
+                        const selected = selectedRegion === region;
+
+                        return (
+                          <button
+                            key={region}
+                            type="button"
+                            className={`flex min-h-12 w-full items-center px-5 py-3 text-left text-sm font-bold transition-default ${
+                              selected
+                                ? "bg-emerald-50 text-emerald-800"
+                                : "bg-white text-slate-900 hover:bg-slate-50 hover:text-emerald-700"
+                            }`}
+                            role="option"
+                            aria-selected={selected}
+                            onClick={() => {
+                              setSelectedRegion(region);
+                              setRegionOpen(false);
+                            }}
+                          >
+                            {region}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
 

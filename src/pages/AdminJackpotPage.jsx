@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Download, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CheckCircle2, Download, Plus, X } from "lucide-react";
 import PageContainer from "@/components/ui/PageContainer";
 import PageHeader from "@/components/ui/PageHeader";
 
@@ -9,6 +9,7 @@ import NextDrawCard from "@/components/AdminJackpot/NextDrawCard";
 import RecentWinnersCard from "@/components/AdminJackpot/RecentWinnersCard";
 import JackpotConfigCard from "@/components/AdminJackpot/JackpotConfigCard";
 import JackpotStatsRow from "@/components/AdminJackpot/JackpotStatsRow";
+import CreatePrizePoolModal from "@/components/AdminJackpot/CreatePrizePoolModal";
 
 // Mock Data
 import {
@@ -26,6 +27,15 @@ export default function AdminJackpotPage() {
   const [maxPayout, setMaxPayout] = useState(jackpotConfig.maxPayoutMultiplier);
   const [drawFrequency, setDrawFrequency] = useState(jackpotConfig.drawFrequency);
   const [autoSeed, setAutoSeed] = useState(jackpotConfig.autoSeedEnabled);
+  const [prizePoolModalOpen, setPrizePoolModalOpen] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    if (!toast) return undefined;
+
+    const toastTimer = window.setTimeout(() => setToast(null), 3600);
+    return () => window.clearTimeout(toastTimer);
+  }, [toast]);
 
   const handleResetConfig = () => {
     setHouseEdge(jackpotConfig.houseEdgeContribution);
@@ -38,6 +48,13 @@ export default function AdminJackpotPage() {
 
   const handleSaveConfig = () => {
     alert("Configuration saved successfully.");
+  };
+
+  const handleCreatePrizePool = (pool) => {
+    setToast({
+      title: "Prize pool created",
+      message: `${pool.name} is ready for jackpot operations.`,
+    });
   };
 
   // Header action buttons
@@ -58,7 +75,7 @@ export default function AdminJackpotPage() {
       <button
         type="button"
         className="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer"
-        onClick={() => alert("Setup dialogue opened for a new prize pool.")}
+        onClick={() => setPrizePoolModalOpen(true)}
       >
         <Plus className="h-4 w-4" />
         New Prize Pool
@@ -130,6 +147,34 @@ export default function AdminJackpotPage() {
         </div>
 
       </div>
+
+      <CreatePrizePoolModal
+        open={prizePoolModalOpen}
+        onClose={() => setPrizePoolModalOpen(false)}
+        onCreate={handleCreatePrizePool}
+      />
+
+      {toast && (
+        <div
+          className="fixed right-4 top-4 z-[10000] flex w-[calc(100vw-2rem)] max-w-sm items-start gap-3 rounded-xl border border-emerald-200 bg-white p-4 shadow-2xl"
+          role="status"
+          aria-live="polite"
+        >
+          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-extrabold text-slate-950">{toast.title}</p>
+            <p className="mt-0.5 text-sm font-medium text-slate-600">{toast.message}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setToast(null)}
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg text-slate-400 transition-default hover:bg-slate-100 hover:text-slate-800"
+            aria-label="Dismiss notification"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
     </PageContainer>
   );
 }

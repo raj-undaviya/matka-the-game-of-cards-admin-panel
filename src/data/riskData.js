@@ -5,6 +5,8 @@ export const riskStats = {
   blockedIps: 1402,
 };
 
+export const FLAGGED_ACTIVITY_PAGE_SIZE = 10;
+
 export const flaggedActivity = [
   {
     index: "#821",

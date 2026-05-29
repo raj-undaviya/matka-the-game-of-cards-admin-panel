@@ -1,4 +1,4 @@
-export const GAMES_PAGE_SIZE = 4;
+export const GAMES_PAGE_SIZE = 10;
 export const TOTAL_ACTIVE_ARENAS = 42;
 
 export const gamesStats = [

@@ -7,7 +7,7 @@ import ClusterSection from "@/components/AdminDashboard/ClusterSection";
 import DeviceDistribution from "@/components/AdminDashboard/DeviceDistribution";
 import DataTable from "@/components/shared/DataTable";
 import StatusBadge from "@/components/shared/StatusBadge";
-import { activity } from "@/data/dashboarddata";
+import { activity, OVERVIEW_TABLE_ROW_LIMIT } from "@/data/dashboarddata";
 
 export default function AdminDashboardPage() {
   const columns = [
@@ -53,7 +53,7 @@ export default function AdminDashboardPage() {
           <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--text-color)" }}>
             Recent Platform Activity
           </h2>
-          <DataTable columns={columns} data={activity} />
+          <DataTable columns={columns} data={activity.slice(0, OVERVIEW_TABLE_ROW_LIMIT)} />
         </div>
         <DeviceDistribution />
       </div>

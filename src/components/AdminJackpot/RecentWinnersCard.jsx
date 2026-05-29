@@ -1,7 +1,31 @@
+import { useMemo, useState } from "react";
 import { Check, ArrowUpRight } from "lucide-react";
 import DataTable from "@/components/shared/DataTable";
+import TablePagination from "@/components/shared/TablePagination";
+import { JACKPOT_WINNERS_PAGE_SIZE } from "@/data/jackpotData";
 
 export default function RecentWinnersCard({ winners = [] }) {
+  const [page, setPage] = useState(1);
+  const [jumpPage, setJumpPage] = useState("");
+
+  const pageCount = Math.max(1, Math.ceil(winners.length / JACKPOT_WINNERS_PAGE_SIZE));
+  const paginated = useMemo(
+    () => winners.slice((page - 1) * JACKPOT_WINNERS_PAGE_SIZE, page * JACKPOT_WINNERS_PAGE_SIZE),
+    [page, winners]
+  );
+
+  const handlePageChange = (nextPage) => {
+    setPage(Math.min(Math.max(1, nextPage), pageCount));
+  };
+
+  const handleJumpToPage = () => {
+    const num = parseInt(jumpPage, 10);
+    if (!Number.isNaN(num) && num >= 1 && num <= pageCount) {
+      setPage(num);
+      setJumpPage("");
+    }
+  };
+
   const columns = [
     {
       title: "Winner Details",
@@ -80,7 +104,7 @@ export default function RecentWinnersCard({ winners = [] }) {
 
         {/* Table data view */}
         <div className="space-y-3 sm:hidden">
-          {winners.map((winner) => (
+          {paginated.map((winner) => (
             <div
               key={winner.id}
               className="rounded-xl border border-slate-100 bg-slate-50/40 p-3"
@@ -116,8 +140,17 @@ export default function RecentWinnersCard({ winners = [] }) {
         </div>
 
         <div className="hidden overflow-x-auto rounded-xl border border-slate-100 sm:block">
-          <DataTable columns={columns} data={winners} />
+          <DataTable columns={columns} data={paginated} />
         </div>
+
+        <TablePagination
+          page={page}
+          pageCount={pageCount}
+          jumpPage={jumpPage}
+          onPageChange={handlePageChange}
+          onJumpPageChange={setJumpPage}
+          onJumpToPage={handleJumpToPage}
+        />
       </div>
     </div>
   );

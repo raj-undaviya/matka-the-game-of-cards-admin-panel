@@ -1,5 +1,7 @@
 export const complianceRate = 88;
 
+export const POLICY_VERSION_PAGE_SIZE = 10;
+
 export const jurisdictions = [
   {
     id: "eu",

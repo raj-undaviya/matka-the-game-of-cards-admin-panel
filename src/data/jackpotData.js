@@ -12,6 +12,8 @@ export const jackpotStats = {
   reserveRatio: "114%",
 };
 
+export const JACKPOT_WINNERS_PAGE_SIZE = 10;
+
 // Target date is exactly 5 hours from the user's current execution time
 export const countdownTarget = new Date(Date.now() + 5 * 60 * 60 * 1000);
 

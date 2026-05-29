@@ -1,10 +1,12 @@
+import { useMemo, useState } from "react";
 import { Clock, Eye, Pencil, Trash2 } from "lucide-react";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import SectionCard from "@/components/shared/SectionCard";
 import DataTable from "@/components/shared/DataTable";
+import TablePagination from "@/components/shared/TablePagination";
 import UserAvatar from "@/components/ui/UserAvatar";
-import { policyVersionHistory } from "@/data/policiesData";
+import { policyVersionHistory, POLICY_VERSION_PAGE_SIZE } from "@/data/policiesData";
 
 const columns = [
   { title: "VERSION", dataIndex: "version" },
@@ -62,6 +64,27 @@ const columns = [
 ];
 
 export default function PolicyVersionHistory() {
+  const [page, setPage] = useState(1);
+  const [jumpPage, setJumpPage] = useState("");
+
+  const pageCount = Math.max(1, Math.ceil(policyVersionHistory.length / POLICY_VERSION_PAGE_SIZE));
+  const paginated = useMemo(
+    () => policyVersionHistory.slice((page - 1) * POLICY_VERSION_PAGE_SIZE, page * POLICY_VERSION_PAGE_SIZE),
+    [page]
+  );
+
+  const handlePageChange = (nextPage) => {
+    setPage(Math.min(Math.max(1, nextPage), pageCount));
+  };
+
+  const handleJumpToPage = () => {
+    const num = parseInt(jumpPage, 10);
+    if (!Number.isNaN(num) && num >= 1 && num <= pageCount) {
+      setPage(num);
+      setJumpPage("");
+    }
+  };
+
   return (
     <SectionCard
       title="Policy Version History"
@@ -77,7 +100,16 @@ export default function PolicyVersionHistory() {
       }
       bodyClassName="pt-4"
     >
-      <DataTable columns={columns} data={policyVersionHistory} />
+      <DataTable columns={columns} data={paginated} />
+
+      <TablePagination
+        page={page}
+        pageCount={pageCount}
+        jumpPage={jumpPage}
+        onPageChange={handlePageChange}
+        onJumpPageChange={setJumpPage}
+        onJumpToPage={handleJumpToPage}
+      />
     </SectionCard>
   );
 }

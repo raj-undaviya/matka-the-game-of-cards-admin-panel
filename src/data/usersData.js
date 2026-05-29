@@ -1,4 +1,4 @@
-export const USERS_PAGE_SIZE = 5;
+export const USERS_PAGE_SIZE = 10;
 
 export const userStats = [
   {

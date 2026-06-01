@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { ChevronDown, ClipboardList, KeyRound, Shield, Settings, LogOut } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import useAuth from "@/hooks/useAuth";
 
 import useClickOutside from "@/hooks/useClickOutside";
 

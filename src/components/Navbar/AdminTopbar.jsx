@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { Menu, Settings } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import TopbarSearch from "@/components/Navbar/TopbarSearch";
 import NotificationMenu from "@/components/Navbar/NotificationMenu";
 import ProfileDropdown from "./ProfileDropdown";
-import { useAuth } from "@/context/AuthContext";
 
 export function AdminTopbar({ setOpen }) {
   const [searchExpanded, setSearchExpanded] = useState(false);
-  const { user } = useAuth();
 
   return (
     <header

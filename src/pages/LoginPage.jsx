@@ -9,26 +9,26 @@ import {
   Sparkles,
   AlertCircle,
 } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import useAuth from "@/hooks/useAuth";
+import useToast from "@/utils/useToast";
 
 export default function LoginPage() {
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, loginLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const toast = useToast();
 
   // Redirect if already authenticated
   // if (isAuthenticated) {
   //   navigate("/admin/overview", { replace: true });
   // }
 
-  const [email, setEmail] = useState("akshitasondagar@gmail.com");
-  const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState("admin@yopmail.com");
+  const [password, setPassword] = useState("admin@123");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
   const from = location.state?.from?.pathname || "/admin/overview";
 
   // Redirect if already authenticated  
@@ -38,7 +38,7 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -57,40 +57,15 @@ export default function LoginPage() {
       return;
     }
 
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const success = login(email, password);
-
-      setIsLoading(false);
-
-      if (success) {
-        navigate(from, { replace: true });
-      } else {
-        setError(
-          "Invalid credentials. Try any password with 6+ characters."
-        );
-      }
-    }, 800);
-  };
-
-  const handleGoogleLogin = () => {
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const success = login(
-        "akshitasondagar@gmail.com",
-        "google-oauth"
-      );
-
-      setIsLoading(false);
-
-      if (success) {
-        navigate(from, { replace: true });
-      } else {
-        setError("Google authentication failed.");
-      }
-    }, 800);
+    try {
+      await login({ email, password, rememberAuth: rememberMe });
+      toast.success("Login successful");
+      navigate(from, { replace: true });
+    } catch (apiError) {
+      const message = apiError?.message || "Login failed";
+      setError(message);
+      toast.error(message);
+    }
   };
 
   return (
@@ -237,7 +212,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
-                    disabled={isLoading}
+                    disabled={loginLoading}
                     className="w-full bg-transparent pl-11 pr-3 py-3 text-sm font-bold text-slate-700 focus:outline-none"
                   />
                 </div>
@@ -270,7 +245,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    disabled={isLoading}
+                    disabled={loginLoading}
                     className="w-full bg-transparent pl-11 pr-11 py-3 text-sm font-bold text-slate-700 focus:outline-none"
                   />
 
@@ -309,37 +284,16 @@ export default function LoginPage() {
               {/* Button */}
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={loginLoading}
                 className="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-md hover:shadow-lg transition-all duration-200"
               >
-                {isLoading ? (
+                {loginLoading ? (
                   <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   "Sign in to dashboard"
                 )}
               </button>
             </form>
-
-            {/* Divider */}
-            <div className="relative flex items-center justify-center">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200" />
-              </div>
-
-              <span className="relative px-3 bg-white text-[10px] font-black uppercase tracking-widest text-slate-400">
-                or
-              </span>
-            </div>
-
-            {/* Google Button */}
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              disabled={isLoading}
-              className="w-full inline-flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 text-sm font-bold shadow-sm transition-all duration-200"
-            >
-              Continue with Google
-            </button>
 
             {/* Footer Text */}
             <p className="text-center text-xs font-semibold text-slate-400 pt-2">

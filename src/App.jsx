@@ -14,7 +14,7 @@ import { AuthProvider } from "@/context/AuthContext";
 
 function App() {
   const [open, setOpen] = useState(false);
-
+  
   return (
     <AuthProvider>
       <BrowserRouter>

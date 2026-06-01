@@ -5,6 +5,7 @@ import AdminDashboardPage from "@/pages/AdminDashboardPage";
 import AdminUsersPage from "@/pages/AdminUsersPage";
 import AdminGamesPage from "@/pages/AdminGamesPage";
 import AdminJackpotPage from "@/pages/AdminJackpotPage";
+import AdminWalletPage from "@/pages/AdminWalletPage";
 import AdminRiskPage from "@/pages/AdminRiskPage";
 import AdminPoliciesPage from "@/pages/AdminPoliciesPage";
 import LoginPage from "@/pages/LoginPage";
@@ -12,7 +13,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 
 function App() {
   const [open, setOpen] = useState(false);
-
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -31,6 +32,7 @@ function App() {
             <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route path="/admin/games" element={<AdminGamesPage />} />
             <Route path="/admin/jackpot" element={<AdminJackpotPage />} />
+            <Route path="/admin/wallet" element={<AdminWalletPage />} />
             <Route path="/admin/risk" element={<AdminRiskPage />} />
             <Route path="/admin/policies" element={<AdminPoliciesPage />} />
           </Route>

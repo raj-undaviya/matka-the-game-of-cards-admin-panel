@@ -1,14 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  ShieldCheck,
-  Sparkles,
-  AlertCircle,
-} from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ShieldCheck, Sparkles, AlertCircle } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import useToast from "@/utils/useToast";
 
@@ -213,7 +205,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
                     disabled={loginLoading}
-                    className="w-full bg-transparent pl-11 pr-3 py-3 text-sm font-bold text-slate-700 focus:outline-none"
+                    className="w-full bg-transparent pl-11 pr-3 py-3 text-sm text-slate-700 focus:outline-none"
                   />
                 </div>
               </div>
@@ -246,7 +238,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     disabled={loginLoading}
-                    className="w-full bg-transparent pl-11 pr-11 py-3 text-sm font-bold text-slate-700 focus:outline-none"
+                    className="w-full bg-transparent pl-11 pr-11 py-3 text-sm text-slate-700 focus:outline-none"
                   />
 
                   <button

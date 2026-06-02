@@ -10,12 +10,14 @@ import AdminRiskPage from "@/pages/AdminRiskPage";
 import AdminPoliciesPage from "@/pages/AdminPoliciesPage";
 import LoginPage from "@/pages/LoginPage";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import CommonLoader from "@/components/shared/CommonLoader";
 
 function App() {
   const [open, setOpen] = useState(false);
   
   return (
     <BrowserRouter>
+      <CommonLoader />
       <Routes>
         {/* Public Login Route */}
         <Route path="/login" element={<LoginPage />} />

@@ -12,9 +12,9 @@ export default function UsersHeader() {
           <Button variant="secondary" startIcon={<Download size={18} />}>
             Export CSV
           </Button>
-          <Button variant="primary" startIcon={<UserPlus size={18} />}>
+          {/* <Button variant="primary" startIcon={<UserPlus size={18} />}>
             Manual Register
-          </Button>
+          </Button> */}
         </>
       }
     />

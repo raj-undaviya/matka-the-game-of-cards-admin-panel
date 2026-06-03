@@ -9,16 +9,17 @@ const iconMap = {
   Trophy: <Trophy size={18} />,
 };
 
-export default function DashboardKpiRow() {
+export default function DashboardKpiRow({ cards = kpiCards }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-      {kpiCards.map((card) => (
+      {cards.map((card) => (
         <StatCard
           key={card.label}
           label={card.label}
           value={card.value}
           delta={card.delta}
           deltaSub={card.deltaSub}
+          deltaPositive={card.deltaPositive}
           barPct={card.barPct}
           barColor={card.barColor}
           icon={iconMap[card.iconName]}

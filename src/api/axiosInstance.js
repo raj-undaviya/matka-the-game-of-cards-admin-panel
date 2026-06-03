@@ -1,5 +1,6 @@
 import axios from "axios";
 import { authStorage, getApiErrorMessage } from "@/services/authService";
+import { apiLoadingService } from "@/services/apiLoadingService";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
@@ -11,6 +12,11 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    if (config.showGlobalLoader !== false) {
+      config.globalLoaderTracked = true;
+      apiLoadingService.start();
+    }
+
     const token = authStorage.getToken();
 
     if (token) {
@@ -23,8 +29,18 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (response.config?.globalLoaderTracked) {
+      apiLoadingService.finish();
+    }
+
+    return response;
+  },
   (error) => {
+    if (error?.config?.globalLoaderTracked) {
+      apiLoadingService.finish();
+    }
+
     const normalizedError = {
       status: error?.response?.status,
       message: getApiErrorMessage(error),

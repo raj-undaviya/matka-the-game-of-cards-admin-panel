@@ -29,7 +29,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://matka-the-game-of-cards-be-0ymx.onrender.com",
+        target: "https://matka-the-game-of-cards-be.vercel.app",
         changeOrigin: true,
       },
     },

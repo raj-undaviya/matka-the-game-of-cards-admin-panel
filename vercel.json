@@ -2,7 +2,7 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "https://matka-the-game-of-cards-be-0ymx.onrender.com/api/$1"
+            "destination": "https://matka-the-game-of-cards-be.vercel.app/api/$1"
         },
         {
             "source": "/(.*)",

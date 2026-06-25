@@ -1,10 +1,12 @@
 import StatCard from "@/components/ui/StatCard";
-import { userStats } from "@/data/usersData";
+import { userStats as mockUserStats } from "@/data/usersData";
 
-export default function UsersStatsRow() {
+export default function UsersStatsRow({ stats }) {
+  const displayStats = stats || mockUserStats;
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-      {userStats.map((stat) => (
+      {displayStats.map((stat) => (
         <StatCard
           key={stat.label}
           label={stat.label.toUpperCase()}

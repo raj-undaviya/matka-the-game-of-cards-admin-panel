@@ -1,10 +1,10 @@
-// Map
-
 import { Globe } from "lucide-react";
 import StatusBadge from "@/components/shared/StatusBadge";
-import { deploymentRegions } from "@/data/gamesData";
+import { deploymentRegions as mockRegions } from "@/data/gamesData";
 
-export default function GlobalDeployment() {
+export default function GlobalDeployment({ regions }) {
+  const displayRegions = regions || mockRegions;
+
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
@@ -31,7 +31,7 @@ export default function GlobalDeployment() {
         {[...Array(6)].map((_, i) => (
           <span
             key={i}
-            className="absolute h-2.5 w-2.5 rounded-full"
+            className="absolute h-2.5 w-2.5 rounded-full animate-pulse"
             style={{
               backgroundColor: i % 2 === 0 ? "var(--primary-color)" : "var(--tertiary-color)",
               top: `${20 + (i * 11) % 60}%`,
@@ -42,7 +42,7 @@ export default function GlobalDeployment() {
       </div>
 
       <ul className="space-y-3">
-        {deploymentRegions.map((r) => (
+        {displayRegions.map((r) => (
           <li
             key={r.region}
             className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
@@ -52,7 +52,7 @@ export default function GlobalDeployment() {
               <span className="text-xs" style={{ color: "var(--text-light-color)" }}>
                 {r.latency}ms
               </span>
-              <StatusBadge type={r.statusType} label={r.status} />
+              <StatusBadge type={r.statusType || "running"} label={r.status} />
             </div>
           </li>
         ))}

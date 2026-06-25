@@ -1,9 +1,10 @@
 import LinearProgress from "@mui/material/LinearProgress";
 import { AlertTriangle } from "lucide-react";
-import { riskShieldReport } from "@/data/usersData";
+import { riskShieldReport as mockReport } from "@/data/usersData";
 
-export default function RiskShieldReport() {
-  const { kycComplianceRate, fraudScore, urgentAlert } = riskShieldReport;
+export default function RiskShieldReport({ report }) {
+  const displayReport = report || mockReport;
+  const { kycComplianceRate, fraudScore, urgentAlert } = displayReport;
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm h-full flex flex-col">
@@ -47,23 +48,25 @@ export default function RiskShieldReport() {
         </div>
       </div>
 
-      <div
-        className="mt-5 rounded-xl border p-4 flex gap-3"
-        style={{
-          backgroundColor: "#FFFBEB",
-          borderColor: "#FDE68A",
-        }}
-      >
-        <AlertTriangle size={20} className="shrink-0 mt-0.5" style={{ color: "#D97706" }} />
-        <div>
-          <p className="text-sm font-semibold" style={{ color: "#92400E" }}>
-            {urgentAlert.title}
-          </p>
-          <p className="text-xs mt-1" style={{ color: "#B45309" }}>
-            {urgentAlert.message}
-          </p>
+      {urgentAlert && (
+        <div
+          className="mt-5 rounded-xl border p-4 flex gap-3"
+          style={{
+            backgroundColor: "#FFFBEB",
+            borderColor: "#FDE68A",
+          }}
+        >
+          <AlertTriangle size={20} className="shrink-0 mt-0.5" style={{ color: "#D97706" }} />
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#92400E" }}>
+              {urgentAlert.title || "Alert"}
+            </p>
+            <p className="text-xs mt-1" style={{ color: "#B45309" }}>
+              {urgentAlert.message}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

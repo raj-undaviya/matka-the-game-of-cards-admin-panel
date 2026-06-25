@@ -1,5 +1,5 @@
 import { BarChart3, ClipboardList, Trophy } from "lucide-react";
-import { walletMiniMetrics } from "@/data/walletData";
+import { walletMiniMetrics as mockMetrics } from "@/data/walletData";
 
 const iconMap = {
   receipt: ClipboardList,
@@ -7,10 +7,12 @@ const iconMap = {
   contest: Trophy,
 };
 
-export default function WalletMetricStrip() {
+export default function WalletMetricStrip({ metrics }) {
+  const displayMetrics = metrics || mockMetrics;
+
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-      {walletMiniMetrics.map((metric) => {
+      {displayMetrics.map((metric) => {
         const Icon = iconMap[metric.iconName] ?? BarChart3;
 
         return (

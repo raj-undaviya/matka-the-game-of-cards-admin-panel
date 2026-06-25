@@ -7,9 +7,8 @@ import StatusBadge from "@/components/shared/StatusBadge";
 import LoadBar from "@/components/shared/LoadBar";
 import TablePagination from "@/components/shared/TablePagination";
 import {
-  arenaInstances,
+  arenaInstances as mockArenas,
   GAMES_PAGE_SIZE,
-  TOTAL_ACTIVE_ARENAS,
 } from "@/data/gamesData";
 
 const iconMap = {
@@ -41,7 +40,7 @@ const columns = [
           <div>
             <p className="font-semibold">{row.name}</p>
             <p className="text-xs" style={{ color: "var(--text-light-color)" }}>
-              #{row.id}
+              {row.id}
             </p>
           </div>
         </div>
@@ -90,18 +89,16 @@ const columns = [
   },
 ];
 
-export default function GamesTableSection() {
+export default function GamesTableSection({ arenas }) {
+  const displayArenas = arenas || mockArenas;
   const [page, setPage] = useState(1);
   const [jumpPage, setJumpPage] = useState("");
 
-  const pageCount = Math.max(1, Math.ceil(arenaInstances.length / GAMES_PAGE_SIZE));
+  const pageCount = Math.max(1, Math.ceil(displayArenas.length / GAMES_PAGE_SIZE));
   const paginated = useMemo(
-    () => arenaInstances.slice((page - 1) * GAMES_PAGE_SIZE, page * GAMES_PAGE_SIZE),
-    [page]
+    () => displayArenas.slice((page - 1) * GAMES_PAGE_SIZE, page * GAMES_PAGE_SIZE),
+    [displayArenas, page]
   );
-
-  const showingFrom = (page - 1) * GAMES_PAGE_SIZE + 1;
-  const showingTo = Math.min(page * GAMES_PAGE_SIZE, arenaInstances.length);
 
   const handlePageChange = (nextPage) => {
     setPage(Math.min(Math.max(1, nextPage), pageCount));

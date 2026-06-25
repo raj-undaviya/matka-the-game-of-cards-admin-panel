@@ -1,5 +1,5 @@
 import LinearProgress from "@mui/material/LinearProgress";
-import { liquidityHealth } from "@/data/gamesData";
+import { liquidityHealth as mockHealth } from "@/data/gamesData";
 
 function LiquidityBar({ label, value, pct }) {
   return (
@@ -24,8 +24,9 @@ function LiquidityBar({ label, value, pct }) {
   );
 }
 
-export default function LiquidityHealth() {
-  const { settlementReserve, exposureLimit } = liquidityHealth;
+export default function LiquidityHealth({ health }) {
+  const activeHealth = health || mockHealth;
+  const { settlementReserve, exposureLimit } = activeHealth;
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">

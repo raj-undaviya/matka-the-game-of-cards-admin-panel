@@ -6,7 +6,7 @@ import SectionCard from "@/components/shared/SectionCard";
 import DataTable from "@/components/shared/DataTable";
 import TablePagination from "@/components/shared/TablePagination";
 import UserAvatar from "@/components/ui/UserAvatar";
-import { policyVersionHistory, POLICY_VERSION_PAGE_SIZE } from "@/data/policiesData";
+import { policyVersionHistory as mockVersionHistory, POLICY_VERSION_PAGE_SIZE } from "@/data/policiesData";
 
 const columns = [
   { title: "VERSION", dataIndex: "version" },
@@ -22,9 +22,7 @@ const columns = [
     ),
   },
   { title: "DATE", dataIndex: "date" },
-  
   { title: "CHANGE SUMMARY", dataIndex: "summary" },
-
   {
     title: "ACTIONS",
     dataIndex: "id",
@@ -60,17 +58,19 @@ const columns = [
         </Tooltip>
       </div>
     ),
-  }
+  },
 ];
 
-export default function PolicyVersionHistory() {
+export default function PolicyVersionHistory({ versions }) {
   const [page, setPage] = useState(1);
   const [jumpPage, setJumpPage] = useState("");
 
-  const pageCount = Math.max(1, Math.ceil(policyVersionHistory.length / POLICY_VERSION_PAGE_SIZE));
+  const displayVersions = versions || mockVersionHistory;
+
+  const pageCount = Math.max(1, Math.ceil(displayVersions.length / POLICY_VERSION_PAGE_SIZE));
   const paginated = useMemo(
-    () => policyVersionHistory.slice((page - 1) * POLICY_VERSION_PAGE_SIZE, page * POLICY_VERSION_PAGE_SIZE),
-    [page]
+    () => displayVersions.slice((page - 1) * POLICY_VERSION_PAGE_SIZE, page * POLICY_VERSION_PAGE_SIZE),
+    [displayVersions, page]
   );
 
   const handlePageChange = (nextPage) => {

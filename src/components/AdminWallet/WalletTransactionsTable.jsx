@@ -7,7 +7,7 @@ import SearchInput from "@/components/ui/SearchInput";
 import { CustomDropdown } from "@/components/ui/FormControls";
 import {
   transactionStatusOptions,
-  walletTransactions,
+  walletTransactions as mockTransactions,
   WALLET_PAGE_SIZE,
 } from "@/data/walletData";
 
@@ -72,17 +72,18 @@ const columns = [
   },
 ];
 
-export default function WalletTransactionsTable() {
+export default function WalletTransactionsTable({ transactions, loading: externalLoading }) {
   const [page, setPage] = useState(1);
   const [jumpPage, setJumpPage] = useState("");
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState(transactionStatusOptions[0]);
-  const [loading] = useState(false);
+
+  const allTransactions = transactions || mockTransactions;
 
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    return walletTransactions.filter((transaction) => {
+    return allTransactions.filter((transaction) => {
       const matchesStatus =
         statusFilter === "All Statuses" ||
         transaction.status.toLowerCase() === statusFilter.toLowerCase();
@@ -99,7 +100,7 @@ export default function WalletTransactionsTable() {
 
       return matchesStatus && (!normalizedQuery || searchable.includes(normalizedQuery));
     });
-  }, [query, statusFilter]);
+  }, [allTransactions, query, statusFilter]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / WALLET_PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * WALLET_PAGE_SIZE, page * WALLET_PAGE_SIZE);
@@ -117,6 +118,7 @@ export default function WalletTransactionsTable() {
   };
 
   const resetPage = () => setPage(1);
+  const loading = externalLoading ?? false;
 
   return (
     <section className="rounded-2xl border border-gray-200 bg-white shadow-sm">

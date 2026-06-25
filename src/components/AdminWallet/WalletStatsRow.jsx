@@ -1,5 +1,5 @@
 import { ArrowDownToLine, LineChart, ShieldCheck, WalletCards } from "lucide-react";
-import { walletStats } from "@/data/walletData";
+import { walletStats as mockStats } from "@/data/walletData";
 
 const iconMap = {
   wallet: WalletCards,
@@ -15,10 +15,12 @@ const toneClasses = {
   slate: "bg-slate-50 text-slate-700",
 };
 
-export default function WalletStatsRow() {
+export default function WalletStatsRow({ stats }) {
+  const displayStats = stats || mockStats;
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      {walletStats.map((stat) => {
+      {displayStats.map((stat) => {
         const Icon = iconMap[stat.iconName] ?? WalletCards;
 
         return (

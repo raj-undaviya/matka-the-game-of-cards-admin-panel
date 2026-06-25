@@ -1,5 +1,5 @@
 import { Lock, User, Pencil } from "lucide-react";
-import { recentAdminActions } from "@/data/usersData";
+import { recentAdminActions as mockActions } from "@/data/usersData";
 
 const iconMap = {
   lock: Lock,
@@ -7,7 +7,9 @@ const iconMap = {
   edit: Pencil,
 };
 
-export default function RecentAdminActions() {
+export default function RecentAdminActions({ actions }) {
+  const displayActions = actions || mockActions;
+
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm h-full">
       <h3 className="text-lg font-semibold" style={{ color: "var(--text-color)" }}>
@@ -18,7 +20,7 @@ export default function RecentAdminActions() {
       </p>
 
       <ul className="mt-5 space-y-4">
-        {recentAdminActions.map((action) => {
+        {displayActions.map((action) => {
           const Icon = iconMap[action.icon] ?? User;
           return (
             <li

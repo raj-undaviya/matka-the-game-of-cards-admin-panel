@@ -1,8 +1,11 @@
 import { Shield, CheckCircle2, AlertCircle } from "lucide-react";
 import SectionCard from "@/components/shared/SectionCard";
-import { jurisdictions, complianceRate } from "@/data/policiesData";
+import { jurisdictions as mockJurisdictions, complianceRate as mockRate } from "@/data/policiesData";
 
-export default function JurisdictionalStatus() {
+export default function JurisdictionalStatus({ jurisdictions, complianceRate }) {
+  const displayJurisdictions = jurisdictions || mockJurisdictions;
+  const displayRate = complianceRate ?? mockRate;
+
   return (
     <SectionCard
       title="Jurisdictional Status"
@@ -15,13 +18,13 @@ export default function JurisdictionalStatus() {
             color: "var(--primary-color)",
           }}
         >
-          {complianceRate}% Compliant
+          {displayRate}% Compliant
         </span>
       }
       bodyClassName="pt-4"
     >
       <ul className="space-y-4">
-        {jurisdictions.map((item) => (
+        {displayJurisdictions.map((item) => (
           <li
             key={item.id}
             className="flex items-center justify-between gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0"

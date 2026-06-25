@@ -6,7 +6,6 @@ import UserAvatar from "@/components/ui/UserAvatar";
 import UsersTableFilters from "@/components/AdminUsers/UsersTableFilters";
 import UsersTableActions from "@/components/AdminUsers/UsersTableActions";
 import {
-  users,
   USERS_PAGE_SIZE,
   statusFilterOptions,
   kycFilterOptions,
@@ -52,28 +51,24 @@ const columns = [
   },
 ];
 
-export default function UsersTableSection() {
+export default function UsersTableSection({
+  usersList,
+  loading,
+  statusFilter,
+  kycFilter,
+  searchQuery,
+  onStatusChange,
+  onKycChange,
+  onSearchChange,
+}) {
   const [page, setPage] = useState(1);
   const [jumpPage, setJumpPage] = useState("");
-  const [statusFilter, setStatusFilter] = useState(statusFilterOptions[0]);
-  const [kycFilter, setKycFilter] = useState(kycFilterOptions[1]);
 
-  const filtered = useMemo(() => {
-    return users.filter((user) => {
-      const matchesStatus =
-        statusFilter === "All Statuses" ||
-        user.status.toLowerCase() === statusFilter.toLowerCase();
-
-      const matchesKyc =
-        kycFilter === "KYC: All" ||
-        user.kycStatus.toLowerCase() === kycFilter.replace("KYC: ", "").toLowerCase();
-
-      return matchesStatus && matchesKyc;
-    });
-  }, [statusFilter, kycFilter]);
-
-  const pageCount = Math.max(1, Math.ceil(filtered.length / USERS_PAGE_SIZE));
-  const paginated = filtered.slice((page - 1) * USERS_PAGE_SIZE, page * USERS_PAGE_SIZE);
+  const pageCount = Math.max(1, Math.ceil(usersList.length / USERS_PAGE_SIZE));
+  const paginated = useMemo(
+    () => usersList.slice((page - 1) * USERS_PAGE_SIZE, page * USERS_PAGE_SIZE),
+    [usersList, page]
+  );
 
   const handlePageChange = (nextPage) => {
     setPage(Math.min(Math.max(1, nextPage), pageCount));
@@ -97,25 +92,40 @@ export default function UsersTableSection() {
         statusOptions={statusFilterOptions}
         kycOptions={kycFilterOptions}
         onStatusChange={(value) => {
-          setStatusFilter(value);
+          onStatusChange(value);
           resetPage();
         }}
         onKycChange={(value) => {
-          setKycFilter(value);
+          onKycChange(value);
+          resetPage();
+        }}
+        searchQuery={searchQuery}
+        onSearchChange={(value) => {
+          onSearchChange(value);
           resetPage();
         }}
       />
 
-      <DataTable columns={columns} data={paginated} />
+      {loading ? (
+        <div className="space-y-3 py-6">
+          {[1, 2, 3, 4, 5].map((item) => (
+            <div key={item} className="h-12 animate-pulse rounded-lg bg-slate-100" />
+          ))}
+        </div>
+      ) : (
+        <>
+          <DataTable columns={columns} data={paginated} />
 
-      <TablePagination
-        page={page}
-        pageCount={pageCount}
-        jumpPage={jumpPage}
-        onPageChange={handlePageChange}
-        onJumpPageChange={setJumpPage}
-        onJumpToPage={handleJumpToPage}
-      />
+          <TablePagination
+            page={page}
+            pageCount={pageCount}
+            jumpPage={jumpPage}
+            onPageChange={handlePageChange}
+            onJumpPageChange={setJumpPage}
+            onJumpToPage={handleJumpToPage}
+          />
+        </>
+      )}
     </div>
   );
 }

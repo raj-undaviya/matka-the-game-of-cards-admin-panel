@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SectionCard from "@/components/shared/SectionCard";
 import ControlToggle from "@/components/shared/ControlToggle";
-import { restrictionControls as initialControls } from "@/data/policiesData";
+import { restrictionControls as initialMockControls } from "@/data/policiesData";
 
-export default function RestrictionControls() {
-  const [controls, setControls] = useState(initialControls);
+export default function RestrictionControls({ controls: externalControls, onToggle }) {
+  const [controls, setControls] = useState(externalControls || initialMockControls);
+
+  // Sync with external controls when they arrive from API
+  useEffect(() => {
+    if (externalControls) {
+      setControls(externalControls);
+    }
+  }, [externalControls]);
 
   const handleToggle = (id) => {
     setControls((prev) =>
       prev.map((c) => (c.id === id ? { ...c, enabled: !c.enabled } : c))
     );
+    if (onToggle) onToggle(id);
   };
 
   return (

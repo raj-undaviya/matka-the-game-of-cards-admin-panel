@@ -14,6 +14,7 @@ export default function DataTable({ columns, data }) {
             {columns.map((column) => (
               <TableCell
                 key={column.title}
+                align={column.align || "left"}
                 sx={{
                   fontWeight: 600,
                   fontSize: "0.75rem",
@@ -38,6 +39,7 @@ export default function DataTable({ columns, data }) {
               {columns.map((column) => (
                 <TableCell
                   key={column.title}
+                  align={column.align || "left"}
                   sx={{ borderBottom: "1px solid var(--border-color)", py: 2 }}
                 >
                   {column.render

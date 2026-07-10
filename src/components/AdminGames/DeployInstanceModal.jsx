@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, Rocket, Server, X, Zap } from "lucide-react";
+import gamesApi from "@/api/gamesApi";
+import useToast from "@/utils/useToast";
 
 const regions = [
   "us-east-1 (N. Virginia)",
@@ -10,15 +12,23 @@ const regions = [
 
 const riskProfiles = ["LOW", "MEDIUM", "HIGH"];
 
-export default function DeployInstanceModal({ open, onClose }) {
+export default function DeployInstanceModal({ open, onClose, onDeploy }) {
   const modalRef = useRef(null);
   const regionDropdownRef = useRef(null);
   const closeTimerRef = useRef(null);
   const closingRef = useRef(false);
+  const toast = useToast();
+
   const [closing, setClosing] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(regions[0]);
   const [riskProfile, setRiskProfile] = useState("LOW");
+
+  // Form field state
+  const [arenaName, setArenaName] = useState("");
+  const [maxPlayers, setMaxPlayers] = useState(1000);
+  const [initialLiquidity, setInitialLiquidity] = useState("50,000.00");
+  const [loading, setLoading] = useState(false);
 
   const requestClose = useCallback(() => {
     if (closingRef.current) return;
@@ -87,6 +97,45 @@ export default function DeployInstanceModal({ open, onClose }) {
   const handleOverlayMouseDown = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
       requestClose();
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    if (!arenaName.trim()) {
+      toast.error("Arena Name is required.");
+      return;
+    }
+
+    const cleanedLiquidity = parseFloat(String(initialLiquidity).replace(/,/g, "")) || 0;
+    const regionCode = selectedRegion.split(" ")[0].toUpperCase();
+
+    setLoading(true);
+    try {
+      const payload = {
+        arena_name: arenaName,
+        region: regionCode,
+        max_players: maxPlayers,
+        initial_liquidity: cleanedLiquidity,
+        risk_profile: riskProfile,
+      };
+
+      await gamesApi.deployArena(payload);
+      toast.success("Arena instance deployed successfully!");
+      
+      // Reset form
+      setArenaName("");
+      setSelectedRegion(regions[0]);
+      setMaxPlayers(1000);
+      setInitialLiquidity("50,000.00");
+      setRiskProfile("LOW");
+
+      onDeploy?.();
+    } catch (err) {
+      console.error("Failed to deploy arena:", err);
+      toast.error(err?.message || "Failed to deploy arena instance.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -165,14 +214,16 @@ export default function DeployInstanceModal({ open, onClose }) {
         </header>
 
         <div className="overflow-y-auto px-5 py-6 sm:px-7 sm:py-8">
-          <form className="space-y-7">
+          <form onSubmit={handleSubmit} className="space-y-7">
             <div>
               <label className="mb-3 block text-xs font-black uppercase tracking-widest text-slate-800">
                 Arena Name
               </label>
               <input
                 type="text"
-                defaultValue="e.g. Phoenix-Sector-01"
+                value={arenaName}
+                onChange={(e) => setArenaName(e.target.value)}
+                placeholder="e.g. Phoenix-Sector-01"
                 className="h-14 w-full rounded border border-slate-300 bg-white px-5 text-base font-medium text-slate-950 outline-none transition-default placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/15"
               />
               <p className="mt-2 text-sm italic text-slate-700">
@@ -245,7 +296,8 @@ export default function DeployInstanceModal({ open, onClose }) {
                 </label>
                 <input
                   type="number"
-                  defaultValue="1000"
+                  value={maxPlayers}
+                  onChange={(e) => setMaxPlayers(parseInt(e.target.value, 10) || "")}
                   className="h-14 w-full rounded border border-slate-300 bg-white px-5 text-base font-medium text-slate-950 outline-none transition-default focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/15"
                 />
               </div>
@@ -259,7 +311,8 @@ export default function DeployInstanceModal({ open, onClose }) {
                 <span className="mr-3 text-lg font-medium text-slate-900">$</span>
                 <input
                   type="text"
-                  defaultValue="50,000.00"
+                  value={initialLiquidity}
+                  onChange={(e) => setInitialLiquidity(e.target.value)}
                   className="min-w-0 flex-1 bg-transparent text-base font-medium text-slate-950 outline-none"
                 />
               </div>
@@ -305,6 +358,8 @@ export default function DeployInstanceModal({ open, onClose }) {
                 </div>
               </div>
             </div>
+            
+            <button type="submit" className="hidden" />
           </form>
         </div>
 
@@ -318,10 +373,12 @@ export default function DeployInstanceModal({ open, onClose }) {
           </button>
           <button
             type="button"
-            className="inline-flex h-14 items-center justify-center gap-3 rounded bg-emerald-700 px-8 text-base font-extrabold text-white shadow-md transition-default hover:bg-emerald-800 hover:shadow-lg"
+            onClick={handleSubmit}
+            disabled={loading || !arenaName.trim()}
+            className="inline-flex h-14 items-center justify-center gap-3 rounded bg-emerald-700 px-8 text-base font-extrabold text-white shadow-md transition-default hover:bg-emerald-800 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Zap className="h-5 w-5 fill-white" />
-            Deploy Instance
+            {loading ? "Deploying..." : "Deploy Instance"}
           </button>
         </footer>
       </section>

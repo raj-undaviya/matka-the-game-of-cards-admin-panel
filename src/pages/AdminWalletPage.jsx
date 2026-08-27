@@ -5,6 +5,8 @@ import WalletHeader from "@/components/AdminWallet/WalletHeader";
 import WalletMetricStrip from "@/components/AdminWallet/WalletMetricStrip";
 import WalletStatsRow from "@/components/AdminWallet/WalletStatsRow";
 import WalletTransactionsTable from "@/components/AdminWallet/WalletTransactionsTable";
+import WalletWithdrawalsTable from "@/components/AdminWallet/WalletWithdrawalsTable";
+import Tabs from "@/components/shared/Tabs";
 import walletApi from "@/api/walletApi";
 import {
   mapWalletStatsResponse,
@@ -17,6 +19,7 @@ export default function AdminWalletPage() {
   const [walletStats, setWalletStats] = useState(null);
   const [walletMetrics, setWalletMetrics] = useState(null);
   const [transactions, setTransactions] = useState(null);
+  const [activeTab, setActiveTab] = useState("ledger");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -54,7 +57,23 @@ export default function AdminWalletPage() {
       <WalletStatsRow stats={walletStats} />
       <WalletChartCard />
       <WalletMetricStrip metrics={walletMetrics} />
-      <WalletTransactionsTable transactions={transactions} loading={loading} />
+      
+      <div className="mt-8 mb-4">
+        <Tabs
+          tabs={[
+            { id: "ledger", label: "Platform Ledger" },
+            { id: "withdrawals", label: "Withdrawal Requests" }
+          ]}
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
+      </div>
+
+      {activeTab === "ledger" ? (
+        <WalletTransactionsTable transactions={transactions} loading={loading} />
+      ) : (
+        <WalletWithdrawalsTable />
+      )}
     </PageContainer>
   );
 }

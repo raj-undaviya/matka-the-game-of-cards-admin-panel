@@ -5,13 +5,13 @@ const walletApi = {
   getDashboard() {
     return axiosInstance.get(API_ROUTES.ADMIN.DASHBOARD);
   },
-  getWithdraws() {
-    return axiosInstance.get(API_ROUTES.WALLET.WITHDRAWS);
+  getWithdraws(params = {}) {
+    return axiosInstance.get(API_ROUTES.WALLET.WITHDRAWS, { params });
   },
   withdrawAction(withdrawId, { action, reason }) {
     return axiosInstance.post(`${API_ROUTES.WALLET.WITHDRAWS}${withdrawId}/action/`, {
       action,
-      reason,
+      admin_note: reason,
     });
   },
   markPaid(withdrawId) {

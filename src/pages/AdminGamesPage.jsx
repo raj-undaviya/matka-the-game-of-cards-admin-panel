@@ -86,24 +86,12 @@ export default function AdminGamesPage() {
   return (
     <>
       <PageContainer>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <GamesHeader onDeployClick={() => setDeployModalOpen(true)} />
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setCreateGameOpen(true)}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded bg-blue-700 px-4 text-sm font-extrabold text-white shadow transition-default hover:bg-blue-800"
-            >
-              <Plus className="h-4 w-4" />
-              Add Game Template
-            </button>
-            <button
-              onClick={() => setCreatePoolOpen(true)}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded bg-purple-700 px-4 text-sm font-extrabold text-white shadow transition-default hover:bg-purple-800"
-            >
-              <Layers className="h-4 w-4" />
-              Create New Pool
-            </button>
-          </div>
+        <div className="mb-6">
+          <GamesHeader
+            onDeployClick={() => setDeployModalOpen(true)}
+            onAddTemplateClick={() => setCreateGameOpen(true)}
+            onCreatePoolClick={() => setCreatePoolOpen(true)}
+          />
         </div>
 
         <GamesStatsRow stats={gamesData?.gamesStats} loading={loading} />
@@ -170,7 +158,7 @@ export default function AdminGamesPage() {
                           {pool.status === "upcoming" && (
                             <button
                               onClick={() => handleStartPool(pool.id)}
-                              className="inline-flex h-9 items-center justify-center gap-1.5 rounded bg-emerald-700 px-3 text-xs font-bold text-white shadow-sm hover:bg-emerald-800"
+                              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 text-xs font-bold text-white shadow-sm hover:bg-emerald-700 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                             >
                               <Play className="h-3 w-3 fill-white" />
                               Start Pool
@@ -179,9 +167,9 @@ export default function AdminGamesPage() {
                           {pool.status !== "upcoming" && (
                             <button
                               onClick={() => handleViewLeaderboard(pool.id)}
-                              className="inline-flex h-9 items-center justify-center gap-1.5 rounded border border-slate-300 bg-white px-3 text-xs font-bold text-slate-800 hover:bg-slate-50"
+                              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 active:scale-[0.98] transition-all duration-200 cursor-pointer"
                             >
-                              <Award className="h-3.5 w-3.5 text-slate-700" />
+                              <Award className="h-3.5 w-3.5 text-slate-500" />
                               Leaderboard
                             </button>
                           )}

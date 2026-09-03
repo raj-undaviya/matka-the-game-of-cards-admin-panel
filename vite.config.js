@@ -29,7 +29,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://backend.matka-game.binaries.org.in.app",
+        target: "https://backend.matka-game.binaries.org.in",
         changeOrigin: true,
       },
     },

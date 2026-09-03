@@ -7,7 +7,7 @@ const API_ROUTES = {
     GAMES: "/game/admin/games/",
     GAMES_CREATE: "game/admin/games/create/",
     POOLS_CREATE: "game/admin/pools/create/",
-    POOLS_START: (poolId) => `/admin/pools/${poolId}/start/`,
+    POOLS_START: (poolId) => `game/admin/pools/${poolId}/start/`,
     ROUNDS: "/game/admin/rounds/",
     USERS: "/game/admin/users/",
     TRANSACTIONS: "/game/admin/transactions/",

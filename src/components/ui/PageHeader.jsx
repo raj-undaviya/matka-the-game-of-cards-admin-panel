@@ -22,7 +22,7 @@ export default function PageHeader({ eyebrow, title, subtitle, actions }) {
           </p>
         )}
       </div>
-      {actions && <div className="flex min-w-0 flex-wrap gap-3">{actions}</div>}
+      {actions && <div className="flex min-w-0 flex-wrap gap-3 lg:justify-end lg:items-center">{actions}</div>}
     </div>
   );
 }

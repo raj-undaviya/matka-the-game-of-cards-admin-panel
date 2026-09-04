@@ -10,10 +10,12 @@ export default function CreatePoolModal({ open, onClose, onSuccess }) {
   const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState("");
   const [name, setName] = useState("");
-  const [entryFee, setEntryFee] = useState(10);
+  const [entryFee, setEntryFee] = useState(100);
+  const [winPrize, setWinPrize] = useState(1000);
   const [maxPlayers, setMaxPlayers] = useState(100);
-  const [durationMinutes, setDurationMinutes] = useState(5);
-  const [roundsCount, setRoundsCount] = useState(10);
+  const [durationMinutes, setDurationMinutes] = useState(1);
+  const [isRecurring, setIsRecurring] = useState(true);
+  const [roundsCount, setRoundsCount] = useState(1);
   const [roundDurationSeconds, setRoundDurationSeconds] = useState(30);
   const [loading, setLoading] = useState(false);
   const [fetchingGames, setFetchingGames] = useState(false);
@@ -67,18 +69,20 @@ export default function CreatePoolModal({ open, onClose, onSuccess }) {
         game: selectedGame,
         name,
         entry_fee: entryFee,
+        win_prize: winPrize,
         max_players: maxPlayers,
         duration_minutes: durationMinutes,
+        is_recurring: isRecurring,
         rounds_count: roundsCount,
         round_duration_seconds: roundDurationSeconds,
       });
-      toast.success("Game pool created successfully!");
+      toast.success("Contest Pool created successfully!");
       setName("");
-      setEntryFee(10);
+      setEntryFee(100);
+      setWinPrize(1000);
       setMaxPlayers(100);
-      setDurationMinutes(5);
-      setRoundsCount(10);
-      setRoundDurationSeconds(30);
+      setDurationMinutes(1);
+      setIsRecurring(true);
       onSuccess?.();
     } catch (err) {
       console.error(err);
@@ -100,8 +104,8 @@ export default function CreatePoolModal({ open, onClose, onSuccess }) {
               <Layers className="h-6 w-6" />
             </div>
             <div>
-              <h2 className="text-xl font-extrabold text-slate-950">Create Game Pool</h2>
-              <p className="mt-1 text-sm text-slate-600">Roll out multiple dynamic pools for players.</p>
+              <h2 className="text-xl font-extrabold text-slate-950">Create Contest Pool</h2>
+              <p className="mt-1 text-sm text-slate-600">Roll out Dream11-style auto-recurring contest slots.</p>
             </div>
           </div>
           <button
@@ -113,7 +117,7 @@ export default function CreatePoolModal({ open, onClose, onSuccess }) {
           </button>
         </header>
 
-        <form onSubmit={handleSubmit} className="overflow-y-auto px-6 py-6 space-y-5">
+        <form onSubmit={handleSubmit} className="overflow-y-auto px-6 py-6 space-y-4">
           <div>
             <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-800">
               Select Game
@@ -145,7 +149,7 @@ export default function CreatePoolModal({ open, onClose, onSuccess }) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Daily Mega Pool A"
+              placeholder="e.g. Speed Arena Slot 1"
               className="h-12 w-full rounded border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-500/15"
             />
           </div>
@@ -158,7 +162,38 @@ export default function CreatePoolModal({ open, onClose, onSuccess }) {
               <input
                 type="number"
                 value={entryFee}
-                onChange={(e) => setEntryFee(parseInt(e.target.value, 10) || 0)}
+                onChange={(e) => {
+                  const fee = parseInt(e.target.value, 10) || 0;
+                  setEntryFee(fee);
+                  setWinPrize(fee * 10);
+                }}
+                className="h-12 w-full rounded border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-500/15"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-800">
+                Win Prize Pool (₹)
+              </label>
+              <input
+                type="number"
+                value={winPrize}
+                onChange={(e) => setWinPrize(parseInt(e.target.value, 10) || 0)}
+                className="h-12 w-full rounded border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-500/15"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-800">
+                Countdown Duration (Minutes)
+              </label>
+              <input
+                type="number"
+                value={durationMinutes}
+                onChange={(e) => setDurationMinutes(parseInt(e.target.value, 10) || 1)}
+                placeholder="1 minute"
                 className="h-12 w-full rounded border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-500/15"
               />
             </div>
@@ -176,42 +211,17 @@ export default function CreatePoolModal({ open, onClose, onSuccess }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div>
-              <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-800">
-                Pool Duration (min)
-              </label>
-              <input
-                type="number"
-                value={durationMinutes}
-                onChange={(e) => setDurationMinutes(parseInt(e.target.value, 10) || 0)}
-                className="h-12 w-full rounded border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-500/15"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-800">
-                Rounds Count
-              </label>
-              <input
-                type="number"
-                value={roundsCount}
-                onChange={(e) => setRoundsCount(parseInt(e.target.value, 10) || 0)}
-                className="h-12 w-full rounded border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-500/15"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-xs font-black uppercase tracking-widest text-slate-800">
-                Round Duration (sec)
-              </label>
-              <input
-                type="number"
-                value={roundDurationSeconds}
-                onChange={(e) => setRoundDurationSeconds(parseInt(e.target.value, 10) || 0)}
-                className="h-12 w-full rounded border border-slate-300 bg-white px-4 text-base font-medium text-slate-950 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-500/15"
-              />
-            </div>
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="isRecurring"
+              checked={isRecurring}
+              onChange={(e) => setIsRecurring(e.target.checked)}
+              className="h-5 w-5 rounded border-slate-300 text-purple-600 focus:ring-purple-500/15"
+            />
+            <label htmlFor="isRecurring" className="text-sm font-bold text-slate-800">
+              Auto-Spawn Next Slot (Dream11 continuous recurrence)
+            </label>
           </div>
         </form>
 

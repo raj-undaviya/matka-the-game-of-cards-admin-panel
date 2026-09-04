@@ -77,7 +77,10 @@ export default function WalletWithdrawalsTable() {
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Error submitting withdrawal action.");
+      const errMsg = err.message || err.data?.message || err.response?.data?.message || "Error submitting withdrawal action.";
+      alert(errMsg);
+      fetchWithdraws();
+      setActionModalOpen(false);
     } finally {
       setSubmittingAction(false);
     }
@@ -90,7 +93,8 @@ export default function WalletWithdrawalsTable() {
       fetchWithdraws();
     } catch (err) {
       console.error(err);
-      alert("Error marking payout as paid.");
+      const errMsg = err.message || err.data?.message || err.response?.data?.message || "Error marking payout as paid.";
+      alert(errMsg);
     }
   };
 

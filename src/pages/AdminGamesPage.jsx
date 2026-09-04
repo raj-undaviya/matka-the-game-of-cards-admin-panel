@@ -25,6 +25,8 @@ export default function AdminGamesPage() {
 
   const [loading, setLoading] = useState(true);
   const [gamesData, setGamesData] = useState(null);
+  const [gamesList, setGamesList] = useState([]);
+  const [gamesListLoading, setGamesListLoading] = useState(false);
   const [pools, setPools] = useState([]);
   const [poolsLoading, setPoolsLoading] = useState(false);
 
@@ -37,6 +39,18 @@ export default function AdminGamesPage() {
       console.error("Failed to load games data:", err);
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  const fetchGamesList = useCallback(async () => {
+    setGamesListLoading(true);
+    try {
+      const res = await gamesApi.getGamesList();
+      setGamesList(res.data);
+    } catch (err) {
+      console.error("Failed to load games list:", err);
+    } finally {
+      setGamesListLoading(false);
     }
   }, []);
 
@@ -54,12 +68,18 @@ export default function AdminGamesPage() {
 
   useEffect(() => {
     fetchGamesData();
+    fetchGamesList();
     fetchPoolsList();
-  }, [fetchGamesData, fetchPoolsList]);
+  }, [fetchGamesData, fetchGamesList, fetchPoolsList]);
 
   const handleDeploySuccess = () => {
     setDeployModalOpen(false);
     fetchGamesData();
+  };
+
+  const handleCreateGameSuccess = () => {
+    setCreateGameOpen(false);
+    fetchGamesList();
   };
 
   const handleCreatePoolSuccess = () => {
@@ -99,6 +119,76 @@ export default function AdminGamesPage() {
         <div className="space-y-6">
           {/* Active Arenas (Rounds) Table */}
           <GamesTableSection arenas={gamesData?.arenaInstances} loading={loading} />
+
+          {/* Configured Dynamic Games Templates Section */}
+          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-black uppercase tracking-wider text-slate-900 sm:text-xl">
+                  Dynamic Game Templates
+                </h3>
+                <p className="mt-1 text-sm font-medium text-slate-500">
+                  Manage active games, graphics, multipliers, and descriptions for the Mobile App.
+                </p>
+              </div>
+              <button
+                onClick={() => setCreateGameOpen(true)}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 text-xs font-bold text-white shadow-sm hover:bg-blue-800 active:scale-[0.98] transition-all cursor-pointer"
+              >
+                <Plus className="h-4 w-4" />
+                Add Game
+              </button>
+            </div>
+
+            {gamesListLoading ? (
+              <p className="text-center py-6 text-sm font-bold text-slate-500">Loading games...</p>
+            ) : gamesList.length === 0 ? (
+              <p className="text-center py-6 text-sm font-bold text-slate-400">No game templates found. Click "Add Game" to create one.</p>
+            ) : (
+              <div className="overflow-x-auto rounded-lg border border-slate-200">
+                <table className="min-w-full divide-y divide-slate-200">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-black uppercase tracking-wider text-slate-500">Game Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-black uppercase tracking-wider text-slate-500">Variation</th>
+                      <th className="px-6 py-3 text-left text-xs font-black uppercase tracking-wider text-slate-500">Description</th>
+                      <th className="px-6 py-3 text-center text-xs font-black uppercase tracking-wider text-slate-500">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-slate-200">
+                    {gamesList.map((g) => (
+                      <tr key={g.id} className="hover:bg-slate-50/50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-slate-900 text-amber-400 font-extrabold text-sm border border-slate-700">
+                              {g.variation}
+                            </div>
+                            <div>
+                              <p className="text-sm font-extrabold text-slate-900">{g.name}</p>
+                              <p className="text-xs text-slate-500">{g.image_url || 'Default Medal'}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-700">
+                          {g.variation}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-slate-600">
+                          {g.description || '—'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${
+                            g.is_active ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-800"
+                          }`}>
+                            {g.is_active ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
           
           {/* Configured Pools Section */}
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
@@ -111,12 +201,19 @@ export default function AdminGamesPage() {
                   Multiple custom tournament pools provided for players.
                 </p>
               </div>
+              <button
+                onClick={() => setCreatePoolOpen(true)}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-purple-700 px-4 text-xs font-bold text-white shadow-sm hover:bg-purple-800 active:scale-[0.98] transition-all cursor-pointer"
+              >
+                <Plus className="h-4 w-4" />
+                Create Pool
+              </button>
             </div>
 
             {poolsLoading ? (
               <p className="text-center py-6 text-sm font-bold text-slate-500">Loading pools...</p>
             ) : pools.length === 0 ? (
-              <p className="text-center py-6 text-sm font-bold text-slate-400">No custom pools configured. Click "Create New Pool" to start.</p>
+              <p className="text-center py-6 text-sm font-bold text-slate-400">No custom pools configured. Click "Create Pool" to start.</p>
             ) : (
               <div className="overflow-x-auto rounded-lg border border-slate-200">
                 <table className="min-w-full divide-y divide-slate-200">
@@ -199,10 +296,7 @@ export default function AdminGamesPage() {
       <CreateGameModal
         open={createGameOpen}
         onClose={() => setCreateGameOpen(false)}
-        onSuccess={() => {
-          setCreateGameOpen(false);
-          fetchPoolsList();
-        }}
+        onSuccess={handleCreateGameSuccess}
       />
 
       <CreatePoolModal

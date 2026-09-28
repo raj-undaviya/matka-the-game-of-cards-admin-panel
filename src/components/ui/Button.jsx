@@ -9,7 +9,7 @@ export default function Button({
   ...props
 }) {
   const baseClasses = "inline-flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs font-bold shadow-sm transition-all duration-200 cursor-pointer select-none focus:outline-none active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100";
-  
+
   const variantClasses = {
     primary: "bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-100/50",
     secondary: "border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-slate-100/50",

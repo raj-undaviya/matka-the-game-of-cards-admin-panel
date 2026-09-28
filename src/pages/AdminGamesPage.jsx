@@ -9,17 +9,19 @@ import ArenaRiskProfile from "@/components/AdminGames/ArenaRiskProfile";
 import DeployInstanceModal from "@/components/AdminGames/DeployInstanceModal";
 import CreateGameModal from "@/components/AdminGames/CreateGameModal";
 import CreatePoolModal from "@/components/AdminGames/CreatePoolModal";
+import AddHourlyPoolModal from "@/components/AdminGames/AddHourlyPoolModal";
 import PoolLeaderboardModal from "@/components/AdminGames/PoolLeaderboardModal";
 import gamesApi from "@/api/gamesApi";
 import { mapGamesResponse } from "@/services/gamesService";
 import useToast from "@/utils/useToast";
-import { Plus, Play, Award, Layers } from "lucide-react";
+import { Plus, Play, Award, Layers, Clock } from "lucide-react";
 
 export default function AdminGamesPage() {
   const toast = useToast();
   const [deployModalOpen, setDeployModalOpen] = useState(false);
   const [createGameOpen, setCreateGameOpen] = useState(false);
   const [createPoolOpen, setCreatePoolOpen] = useState(false);
+  const [addHourlyPoolOpen, setAddHourlyPoolOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [selectedPoolId, setSelectedPoolId] = useState(null);
 
@@ -84,6 +86,7 @@ export default function AdminGamesPage() {
 
   const handleCreatePoolSuccess = () => {
     setCreatePoolOpen(false);
+    setAddHourlyPoolOpen(false);
     fetchPoolsList();
   };
 
@@ -95,6 +98,21 @@ export default function AdminGamesPage() {
     } catch (err) {
       console.error(err);
       toast.error(err?.message || "Failed to start pool");
+    }
+  };
+
+  const handleToggleEntry = async (poolId, currentStatus) => {
+    const newStatus = !currentStatus;
+    try {
+      await gamesApi.togglePoolEntry(poolId, newStatus);
+      toast.success(`Pool entry ${newStatus ? "enabled (Button Open)" : "disabled (Button Locked)"} successfully!`);
+      // Update local state immediately
+      setPools((prevPools) =>
+        prevPools.map((p) => (p.id === poolId ? { ...p, is_entry_enabled: newStatus } : p))
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.message || "Failed to update pool entry status");
     }
   };
 
@@ -111,6 +129,7 @@ export default function AdminGamesPage() {
             onDeployClick={() => setDeployModalOpen(true)}
             onAddTemplateClick={() => setCreateGameOpen(true)}
             onCreatePoolClick={() => setCreatePoolOpen(true)}
+            onAddHourlyPoolClick={() => setAddHourlyPoolOpen(true)}
           />
         </div>
 
@@ -176,9 +195,8 @@ export default function AdminGamesPage() {
                           {g.description || '—'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${
-                            g.is_active ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-800"
-                          }`}>
+                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${g.is_active ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-800"
+                            }`}>
                             {g.is_active ? "Active" : "Inactive"}
                           </span>
                         </td>
@@ -189,31 +207,40 @@ export default function AdminGamesPage() {
               </div>
             )}
           </div>
-          
+
           {/* Configured Pools Section */}
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
               <div>
                 <h3 className="text-lg font-black uppercase tracking-wider text-slate-900 sm:text-xl">
                   Configured Game Pools
                 </h3>
                 <p className="mt-1 text-sm font-medium text-slate-500">
-                  Multiple custom tournament pools provided for players.
+                  Multiple custom tournament pools with 2-Hour/3-Hour intervals, Daily schedules, and instant Entry Button control.
                 </p>
               </div>
-              <button
-                onClick={() => setCreatePoolOpen(true)}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-purple-700 px-4 text-xs font-bold text-white shadow-sm hover:bg-purple-800 active:scale-[0.98] transition-all cursor-pointer"
-              >
-                <Plus className="h-4 w-4" />
-                Create Pool
-              </button>
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => setCreatePoolOpen(true)}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-purple-700 px-4 text-xs font-bold text-white shadow-sm hover:bg-purple-800 active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <Plus className="h-4 w-4" />
+                  Create Pool
+                </button>
+                <button
+                  onClick={() => setAddHourlyPoolOpen(true)}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-amber-600 px-4 text-xs font-bold text-white shadow-sm hover:bg-amber-700 active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  <Clock className="h-4 w-4" />
+                  Add Hourly Pool
+                </button>
+              </div>
             </div>
 
             {poolsLoading ? (
               <p className="text-center py-6 text-sm font-bold text-slate-500">Loading pools...</p>
             ) : pools.length === 0 ? (
-              <p className="text-center py-6 text-sm font-bold text-slate-400">No custom pools configured. Click "Create Pool" to start.</p>
+              <p className="text-center py-6 text-sm font-bold text-slate-400">No custom pools configured. Click "Create Pool" or "Add Hourly Pool" to start.</p>
             ) : (
               <div className="overflow-x-auto rounded-lg border border-slate-200">
                 <table className="min-w-full divide-y divide-slate-200">
@@ -221,47 +248,104 @@ export default function AdminGamesPage() {
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-black uppercase tracking-wider text-slate-500">Pool Name</th>
                       <th className="px-6 py-3 text-left text-xs font-black uppercase tracking-wider text-slate-500">Game Template</th>
-                      <th className="px-6 py-3 text-right text-xs font-black uppercase tracking-wider text-slate-500">Entry Fee</th>
-                      <th className="px-6 py-3 text-center text-xs font-black uppercase tracking-wider text-slate-500">Rounds</th>
+                      <th className="px-6 py-3 text-right text-xs font-black uppercase tracking-wider text-slate-500">Entry & Prizes</th>
+                      <th className="px-6 py-3 text-center text-xs font-black uppercase tracking-wider text-slate-500">Schedule / Countdown</th>
                       <th className="px-6 py-3 text-center text-xs font-black uppercase tracking-wider text-slate-500">Capacity</th>
-                      <th className="px-6 py-3 text-center text-xs font-black uppercase tracking-wider text-slate-500">Status</th>
+                      <th className="px-6 py-3 text-center text-xs font-black uppercase tracking-wider text-slate-500">Entry Button Control</th>
                       <th className="px-6 py-3 text-right text-xs font-black uppercase tracking-wider text-slate-500">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-slate-200">
-                    {pools.map((pool) => (
-                      <tr key={pool.id} className="hover:bg-slate-50/50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">{pool.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-600">
-                          {pool.game_name} ({pool.game_variation})
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-extrabold text-slate-900">₹{pool.entry_fee}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-900">
-                          {pool.rounds_count} rounds ({pool.round_duration_seconds}s)
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-semibold text-slate-700">
-                          {pool.participants_count} / {pool.max_players}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${
-                            pool.status === "upcoming" ? "bg-amber-100 text-amber-800" :
-                            pool.status === "active" ? "bg-emerald-100 text-emerald-800 animate-pulse" :
-                            "bg-slate-100 text-slate-800"
-                          }`}>
-                            {pool.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium space-x-2">
-                          {pool.status === "upcoming" && (
+                    {pools.map((pool) => {
+                      const isMega = pool.is_daily_mega || pool.pool_type === "mega_daily";
+                      const isRegular = pool.pool_type === "regular_pool" || pool.pool_type === "regular_5min" || (pool.name && pool.name.includes("Regular"));
+                      const isHourly = !isRegular && !isMega && (pool.pool_type === "hourly_pool" || pool.pool_type === "hourly" || (pool.interval_minutes && pool.interval_minutes >= 60));
+                      const p1 = Number(pool.prize_distribution?.["1"] || (isMega ? 6000 : (isRegular ? 300 : pool.entry_fee * 30)));
+                      const p2 = Number(pool.prize_distribution?.["2"] || (isMega ? 4000 : (isRegular ? 200 : pool.entry_fee * 20)));
+                      const p3 = Number(pool.prize_distribution?.["3"] || (isMega ? 2000 : (isRegular ? 100 : pool.entry_fee * 10)));
+                      const entryEnabled = pool.is_entry_enabled !== false;
+
+                      return (
+                        <tr key={pool.id} className={`hover:bg-slate-50/50 ${isMega ? "bg-amber-50/30" : isHourly ? "bg-amber-50/20" : isRegular ? "bg-emerald-50/20" : ""}`}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-extrabold text-slate-900">{pool.name}</span>
+                              {isMega && (
+                                <span className="inline-flex items-center rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-amber-800 border border-amber-300">
+                                  ⭐ Daily
+                                </span>
+                              )}
+                              {isHourly && (
+                                <span className="inline-flex items-center rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-amber-800 border border-amber-300">
+                                  ⏱️ {pool.interval_minutes ? `${pool.interval_minutes / 60}h Interval` : "Hourly"}
+                                </span>
+                              )}
+                              {isRegular && !isHourly && (
+                                <span className="inline-flex items-center rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-800 border border-emerald-300">
+                                  🎯 5-Min Slot
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-slate-500 font-semibold mt-0.5">
+                              {pool.schedule_display || "Auto-Recurring"}
+                            </p>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-600">
+                            {pool.game_name} ({pool.game_variation})
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                            <p className="font-extrabold text-slate-900">₹{pool.entry_fee}</p>
+                            {p1 > 0 ? (
+                              <p className="text-[11px] font-bold text-purple-700">
+                                🥇 ₹{p1.toLocaleString()} | 🥈 ₹{p2.toLocaleString()} | 🥉 ₹{p3.toLocaleString()}
+                              </p>
+                            ) : (
+                              <p className="text-xs font-semibold text-slate-500">
+                                Total: ₹{Number(pool.win_prize).toLocaleString()}
+                              </p>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-bold text-slate-900">
+                            <div className="inline-flex flex-col items-center">
+                              <span className="text-xs font-extrabold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                                {pool.countdown_label || pool.schedule_display || "Active"}
+                              </span>
+                              {pool.starts_in_seconds > 0 && (
+                                <span className="text-[10px] text-amber-700 font-bold mt-0.5">
+                                  Locked until start
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-semibold text-slate-700">
+                            <span className={pool.participants_count >= pool.max_players ? "text-red-600 font-black" : "font-extrabold text-slate-900"}>
+                              {pool.participants_count}
+                            </span>
+                            <span className="text-slate-500"> / {pool.max_players}</span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                             <button
-                              onClick={() => handleStartPool(pool.id)}
-                              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 text-xs font-bold text-white shadow-sm hover:bg-emerald-700 active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                              type="button"
+                              onClick={() => handleToggleEntry(pool.id, entryEnabled)}
+                              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all cursor-pointer ${entryEnabled
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100"
+                                  : "bg-red-50 text-red-800 border-red-300 hover:bg-red-100"
+                                }`}
                             >
-                              <Play className="h-3 w-3 fill-white" />
-                              Start Pool
+                              <span className={`h-2 w-2 rounded-full ${entryEnabled ? "bg-emerald-500 animate-pulse" : "bg-red-500"}`} />
+                              {entryEnabled ? "Entry OPEN (Click to Disable)" : "Entry LOCKED (Click to Enable)"}
                             </button>
-                          )}
-                          {pool.status !== "upcoming" && (
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-medium space-x-2">
+                            {pool.status === "upcoming" && pool.starts_in_seconds === 0 && (
+                              <button
+                                onClick={() => handleStartPool(pool.id)}
+                                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 text-xs font-bold text-white shadow-sm hover:bg-emerald-700 active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                              >
+                                <Play className="h-3 w-3 fill-white" />
+                                Start Now
+                              </button>
+                            )}
                             <button
                               onClick={() => handleViewLeaderboard(pool.id)}
                               className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 active:scale-[0.98] transition-all duration-200 cursor-pointer"
@@ -269,10 +353,10 @@ export default function AdminGamesPage() {
                               <Award className="h-3.5 w-3.5 text-slate-500" />
                               Leaderboard
                             </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -305,6 +389,12 @@ export default function AdminGamesPage() {
         onSuccess={handleCreatePoolSuccess}
       />
 
+      <AddHourlyPoolModal
+        open={addHourlyPoolOpen}
+        onClose={() => setAddHourlyPoolOpen(false)}
+        onSuccess={handleCreatePoolSuccess}
+      />
+
       {selectedPoolId && (
         <PoolLeaderboardModal
           open={leaderboardOpen}
@@ -315,4 +405,3 @@ export default function AdminGamesPage() {
     </>
   );
 }
-  

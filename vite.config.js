@@ -10,6 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const backendTarget = env.VITE_PUBLIC_BACKEND;
+  console.log('Backend Target API: ', backendTarget)
 
   return {
     plugins: [

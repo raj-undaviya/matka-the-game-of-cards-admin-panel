@@ -4,7 +4,7 @@ import { apiLoadingService } from "@/services/apiLoadingService";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
-  timeout: 0,
+  timeout: 15000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    if (config.showGlobalLoader !== false) {
+    if (config.showGlobalLoader === true) {
       config.globalLoaderTracked = true;
       apiLoadingService.start();
     }
